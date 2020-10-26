@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="UTF-8">
+    <title>Main</title>
+</head>
+<body>
+    <div th:if="${param.success}">
+        Book was been added!
+    </div>
+    <button type="submit" formmethod="get" formaction="/main/table">View All Book</button>
+    <button type="submit" formmethod="get" formaction="/main/book/add">Add new Book</button>
+</body>
+</html>
