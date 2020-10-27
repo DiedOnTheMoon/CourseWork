@@ -127,4 +127,19 @@ public class Book {
     public void setSpecificBooks(Set<SpecificBook> specificBooks) {
         this.specificBooks = specificBooks;
     }
+
+    public String getAuthorsInString(){
+        StringBuilder str = new StringBuilder();
+
+        for(Author a : authors){
+
+            str.append(a.getAuthorName()).append(",");
+        }
+
+        if(str.charAt(str.length() - 1) == ','){
+            str.deleteCharAt(str.length() - 1);
+        }
+
+        return str.toString();
+    }
 }

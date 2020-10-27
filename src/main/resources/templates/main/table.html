@@ -1,10 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-
+    <table>
+        <thead>
+            <tr>
+                <th> Title </th>
+                <th> Author </th>
+                <th> Language </th>
+                <th> Publisher </th>
+                <th> Year </th>
+                <th> Price </th>
+                <th> Search </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="book : ${books}">
+                <td th:text="${book.bookName}"></td>
+                <td th:text="${book.getAuthorsInString()}"></td>
+                <td th:text="${book.publisher.publisherName}"></td>
+                <td th:text="${book.year}"></td>
+                <td th:text="${book.price}"></td>
+                <td> <span >Search</span></td>
+            </tr>
+        </tbody>
+    </table>
 </body>
 </html>
