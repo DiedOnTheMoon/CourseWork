@@ -18,12 +18,6 @@ public class SpecificBookController {
         this.specificBookRepository = specificBookRepository;
     }
 
-    @GetMapping("/table/{id}")
-    public String showTable(@PathVariable String id, Model model){
-        model.addAttribute("books", bookRepository.findById(Long.parseLong(id)).get().getSpecificBooks());
-        return "specificBook/table";
-    }
-
     @GetMapping("/edit/{id}")
     public String showEdit(@PathVariable String id, Model model){
         model.addAttribute("book", specificBookRepository.findById(Long.parseLong(id)).get());
@@ -34,5 +28,11 @@ public class SpecificBookController {
     public String saveEdit(SpecificBook book){
         specificBookRepository.save(book);
         return "/main/main";
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public String deleteBookById(@PathVariable String id){
+        specificBookRepository.deleteById(Long.parseLong(id));
+        return "main/main";
     }
 }

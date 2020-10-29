@@ -1,6 +1,7 @@
 package com.library.spring.controllers;
 
 import com.library.spring.models.*;
+import com.library.spring.repository.BookRepository;
 import com.library.spring.repository.SpecificBookRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,10 +14,11 @@ import java.util.UUID;
 @RequestMapping("/book")
 public class BookController {
     private final SpecificBookRepository specificBookRepository;
+    private final BookRepository bookRepository;
 
-
-    public BookController(SpecificBookRepository specificBookRepository) {
+    public BookController(SpecificBookRepository specificBookRepository, BookRepository bookRepository) {
         this.specificBookRepository = specificBookRepository;
+        this.bookRepository = bookRepository;
     }
 
     @GetMapping("/add")
@@ -31,7 +33,6 @@ public class BookController {
 
         return "book/add";
     }
-
 
     @PostMapping("/add")
     public String addBook(
@@ -66,8 +67,11 @@ public class BookController {
         return "/main/main";
     }
 
+    @GetMapping("/{id}")
+    public String getTable(@PathVariable String id,  Model model){
 
+        model.addAttribute("books", bookRepository.findById(Long.parseLong(id)).get().getSpecificBooks());
 
-
-
+        return "specificBook/table";
+    }
 }

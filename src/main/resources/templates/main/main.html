@@ -9,7 +9,8 @@
     <div th:if="${param.success}">
         Book was been added!
     </div>
-    <button type="submit" formmethod="get" th:action="@{/book/table}">View All Book</button>
-    <button type="submit" formmethod="get" th:action="@{/book/add}">Add new Book</button>
+    <button type="submit" th:method="get" th:action="@{/book/table}">View All Book</button>
+    <button type="submit" th:method="get" th:action="@{/book/add}">Add new Book</button>
+    <button type="submit" th:media="get" th:action="@{}">Add new Reader</button>
 </body>
 </html>

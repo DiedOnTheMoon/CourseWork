@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html  xmlns:th="https://www.thymeleaf.org"
+        lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form th:method="post" th:action="@{/reader/add}" th:object="${reader}">
+        <label>First name:
+            <input type="text" name="firstName" th:field="${reader.firstName}">
+        </label>
+        <label>Last name:
+            <input type="text" name="lastName" th:field="${reader.lastName}">
+        </label>
+        <label>Date of birth:
+            <input type="date" name="dateOfBirth" th:field="${reader.dateOfBirth}">
+        </label>
+        <label>Address:
+            <input type="text" name="address" th:field="${reader.address}">
+        </label>
+        <label>Phone:
+            <input type="text" name="phone" th:field="${reader.phone}">
+        </label>
+        <button type="submit">Add reader</button>
+    </form>
+</body>
+</html>

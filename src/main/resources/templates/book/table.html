@@ -25,7 +25,7 @@
                 <td th:text="${book.publisher.publisherName}"></td>
                 <td th:text="${book.year}"></td>
                 <td th:text="${book.price}"></td>
-                <td><a th:href="@{/book/table/(id=${book.id})}"> Detailed view</a></td>
+                <td><a th:href="@{/book/(id=${book.id})}"> Detailed view</a></td>
             </tr>
         </tbody>
     </table>

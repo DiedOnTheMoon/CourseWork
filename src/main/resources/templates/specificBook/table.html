@@ -29,8 +29,8 @@
             <td th:text="${book.shelf}"></td>
             <td th:text="${book.rank}"></td>
             <td th:text="${book.room}"></td>
-            <td><a th:href="@{/specificBook/edit(id = book.id)}">Edit</a></td>
-            <td><a th:href="@{/specificBook/delete(id = book.id)}">Delete</a></td>
+            <td><a th:href="@{/specificBook/edit/(id = book.id)}" th:action="set">Edit</a></td>
+            <td><a th:href="@{/specificBook/delete/(id = book.id)}" th:action="delete">Delete</a></td>
         </tr>
         </tbody>
     </table>
