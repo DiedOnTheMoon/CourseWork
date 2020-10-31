@@ -1,6 +1,7 @@
 package com.library.spring.controllers;
 
 import com.library.spring.models.*;
+import com.library.spring.repository.BlacklistRepository;
 import com.library.spring.repository.BookRepository;
 import com.library.spring.repository.SpecificBookRepository;
 import org.springframework.stereotype.Controller;
@@ -15,10 +16,13 @@ import java.util.UUID;
 public class BookController {
     private final SpecificBookRepository specificBookRepository;
     private final BookRepository bookRepository;
+    private final BlacklistRepository blacklistRepository;
 
-    public BookController(SpecificBookRepository specificBookRepository, BookRepository bookRepository) {
+    public BookController(SpecificBookRepository specificBookRepository, BookRepository bookRepository,
+                          BlacklistRepository blacklistRepository) {
         this.specificBookRepository = specificBookRepository;
         this.bookRepository = bookRepository;
+        this.blacklistRepository = blacklistRepository;
     }
 
     @GetMapping("/add")
@@ -74,4 +78,19 @@ public class BookController {
 
         return "specificBook/table";
     }
+
+    @PostMapping("/return/{id}/{readerId}")
+    public String returnBook(@PathVariable Long id, @PathVariable String readerId){
+
+        SpecificBook book = specificBookRepository.findById(id).get();
+
+        book.setReturnDate(null);
+        book.setDateOfIssue(null);
+        book.setInPlace(true);
+
+        blacklistRepository.delete(book.getBlacklist());
+
+        return "redirect:/reader/" + readerId;
+    }
+
 }

@@ -9,25 +9,30 @@ public class Blacklist {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
-    @Column(name = "PRICE_BY_DAY")
-    private int priceByDay;
-    @Column(name = "COUNT_DAYS")
-    private int countDays;
-    @Column(name = "SPECIFIC_BOOK_ID")
-    private int specificBookId;
+    @Column(name = "ALL_PRICE")
+    private Long allPrice;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "READER_ID")
     private Reader reader;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "SPECIFIC_BOOK_ID", referencedColumnName = "ID")
+    private SpecificBook specificBook;
+
     public Blacklist() {
     }
 
-    public Blacklist(Long id, int priceByDay, int countDays, int specificBookId, Reader reader) {
+    public Blacklist(Long id, Long allPrice, Reader reader, SpecificBook specificBook) {
         this.id = id;
-        this.priceByDay = priceByDay;
-        this.countDays = countDays;
-        this.specificBookId = specificBookId;
+        this.allPrice = allPrice;
         this.reader = reader;
+        this.specificBook = specificBook;
+    }
+
+    public Blacklist(Long allPrice, Reader reader, SpecificBook specificBook){
+        this.allPrice = allPrice;
+        this.reader = reader;
+        this.specificBook = specificBook;
     }
 
     public Long getId() {
@@ -38,28 +43,12 @@ public class Blacklist {
         this.id = id;
     }
 
-    public int getPriceByDay() {
-        return priceByDay;
+    public Long getAllPrice() {
+        return allPrice;
     }
 
-    public void setPriceByDay(int priceByDay) {
-        this.priceByDay = priceByDay;
-    }
-
-    public int getCountDays() {
-        return countDays;
-    }
-
-    public void setCountDays(int countDays) {
-        this.countDays = countDays;
-    }
-
-    public int getSpecificBookId() {
-        return specificBookId;
-    }
-
-    public void setSpecificBookId(int specificBookId) {
-        this.specificBookId = specificBookId;
+    public void setAllPrice(Long allPrice) {
+        this.allPrice = allPrice;
     }
 
     public Reader getReader() {
@@ -68,5 +57,17 @@ public class Blacklist {
 
     public void setReader(Reader reader) {
         this.reader = reader;
+    }
+
+    public SpecificBook getSpecificBook() {
+        return specificBook;
+    }
+
+    public void setSpecificBook(SpecificBook specificBook) {
+        this.specificBook = specificBook;
+    }
+
+    public String normalRepresentation(){
+        return String.format("%d.%2d", allPrice / 100, allPrice % 100);
     }
 }

@@ -25,6 +25,13 @@ public class Reader {
     private int behaviorRank;
     @OneToMany(mappedBy = "reader", cascade = CascadeType.ALL)
     private Set<Blacklist> blacklists;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "SPECIFIC_BOOK_READER",
+            joinColumns = @JoinColumn(name="READER_ID"),
+            inverseJoinColumns = @JoinColumn(name = "SPECIFIC_BOOK_ID")
+    )
+    private Set<SpecificBook> specificBooks;
 
     public Reader(Long id, String firstName, String lastName, Date dateOfBirth, String address, String phone,
                   int behaviorRank, Set<Blacklist> blacklists) {
@@ -96,5 +103,21 @@ public class Reader {
 
     public void setBehaviorRank(int behaviorRank) {
         this.behaviorRank = behaviorRank;
+    }
+
+    public Set<Blacklist> getBlacklists() {
+        return blacklists;
+    }
+
+    public void setBlacklists(Set<Blacklist> blacklists) {
+        this.blacklists = blacklists;
+    }
+
+    public Set<SpecificBook> getSpecificBooks() {
+        return specificBooks;
+    }
+
+    public void setSpecificBooks(Set<SpecificBook> specificBooks) {
+        this.specificBooks = specificBooks;
     }
 }

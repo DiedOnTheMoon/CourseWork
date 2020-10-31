@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html  xmlns:th="https://www.thymeleaf.org"
+        lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form th:object="${reader}">
+        <label> First name:<p></p>
+            <input type="text" name="firstName" th:field="${reader.firstName}">
+        </label>
+        <p></p>
+        <label> Last name:<p></p>
+            <input type="text" name="lastName" th:field="${reader.lastName}">
+        </label>
+        <p></p>
+        <label> Date of birth:<p></p>
+            <input type="date" name="dateOfBirth" th:field="${reader.dateOfBirth}">
+        </label>
+        <p></p>
+        <label> Address:<p></p>
+            <input type="text" name="address" th:field="${reader.address}">
+        </label>
+        <p></p>
+        <label> Phone:<p></p>
+            <input type="text" name="phone" th:field="${reader.phone}">
+        </label>
+        <p></p>
+        <label> Behavior rank:<p></p>
+            <input type="text" readonly name="behaviorRank" th:field="${reader.behaviorRank}">
+        </label>
+        <p></p>
+        <label>Number of books owed:<p></p>
+            <input type="text" name="blacklists" readonly th:field="${reader.blacklists.size()}">
+        </label>
+        <p></p>
+        <label> All taken books</label>
+
+        <label> Indebtedness </label>
+        <table>
+            <thead>
+            <tr>
+                <th> Title </th>
+                <th> Return Date</th>
+                <th> Price</th>
+                <th> Return Book</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="book : ${owed}" >
+                <td th:text="${book.specificBook.book.bookName}"></td>
+                <td th:text="${book.specificBook.returnDate}"></td>
+                <td th:text="${book.normalRepresentation()}"></td>
+                <td><a th:href="@{/book/return/(id=book.id)/(readerId=reader.id)}">return</a></td>
+            </tr>
+            </tbody>
+        </table>
+
+    </form>
+</body>
+</html>

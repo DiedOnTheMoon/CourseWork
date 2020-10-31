@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+        lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <table>
+
+        <thead>
+            <th> First name </th>
+            <th> Last name </th>
+            <th> Date of birth </th>
+            <th> Address </th>
+            <th> Phone </th>
+            <th> Behavior rank </th>
+            <th> Number of books owed </th>
+            <th> Detail view </th>
+        </thead>
+        <tbody>
+            <tr th:each="reader : ${readers}">
+                <td th:text="${reader.firstName}"></td>
+                <td th:text="${reader.lastName}"></td>
+                <td th:text="${reader.dateOfBirth}"></td>
+                <td th:text="${reader.address}"></td>
+                <td th:text="${reader.phone}"></td>
+                <td th:text="${reader.behaviorRank}"></td>
+                <td th:text="${reader.blacklists.size()}"></td>
+                <td><a th:href="@{reader/(id=${reader.id})}"></a></td>
+            </tr>
+        </tbody>
+
+
+    </table>
+
+</body>
+</html>

@@ -1,7 +1,9 @@
 package com.library.spring.models;
 
+import org.joda.time.DateTime;
+
 import javax.persistence.*;
-import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "SPECIFIC_BOOK")
@@ -15,9 +17,9 @@ public class SpecificBook {
     @Column(name = "IN_PLACE")
     private Boolean inPlace;
     @Column(name = "DATE_OF_ISSUE")
-    private Date dateOfIssue;
+    private DateTime dateOfIssue;
     @Column(name = "RETURN_DATE")
-    private Date returnDate;
+    private DateTime returnDate;
     @Column(name = "SHELF")
     private String shelf;
     @Column(name = "RANK")
@@ -27,12 +29,16 @@ public class SpecificBook {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "BOOK_ID", nullable = false)
     private Book book;
+    @ManyToMany(mappedBy = "specificBooks", cascade = CascadeType.ALL)
+    private Set<Reader> readers;
+    @OneToOne(mappedBy = "specificBook")
+    private Blacklist blacklist;
 
     public SpecificBook() {
 
     }
 
-    public SpecificBook(Long id, String uniqueCode, Boolean inPlace, Date dateOfIssue, Date returnDate,
+    public SpecificBook(Long id, String uniqueCode, Boolean inPlace, DateTime dateOfIssue, DateTime returnDate,
                         String shelf, String rank, String room, Book book) {
         this.id = id;
         this.uniqueCode = uniqueCode;
@@ -61,19 +67,19 @@ public class SpecificBook {
         this.uniqueCode = uniqueCode;
     }
 
-    public Date getDateOfIssue() {
+    public DateTime getDateOfIssue() {
         return dateOfIssue;
     }
 
-    public void setDateOfIssue(Date dateOfIssue) {
+    public void setDateOfIssue(DateTime dateOfIssue) {
         this.dateOfIssue = dateOfIssue;
     }
 
-    public Date getReturnDate() {
+    public DateTime getReturnDate() {
         return returnDate;
     }
 
-    public void setReturnDate(Date returnDate) {
+    public void setReturnDate(DateTime returnDate) {
         this.returnDate = returnDate;
     }
 
@@ -115,5 +121,21 @@ public class SpecificBook {
 
     public void setRoom(String room) {
         this.room = room;
+    }
+
+    public Set<Reader> getReaders() {
+        return readers;
+    }
+
+    public void setReaders(Set<Reader> readers) {
+        this.readers = readers;
+    }
+
+    public Blacklist getBlacklist() {
+        return blacklist;
+    }
+
+    public void setBlacklist(Blacklist blacklist) {
+        this.blacklist = blacklist;
     }
 }
