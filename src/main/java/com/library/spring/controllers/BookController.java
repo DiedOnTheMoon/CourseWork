@@ -88,7 +88,9 @@ public class BookController {
         book.setDateOfIssue(null);
         book.setInPlace(true);
 
-        blacklistRepository.delete(book.getBlacklist());
+        if(book.getBlacklist() != null) {
+            blacklistRepository.delete(book.getBlacklist());
+        }
 
         return "redirect:/reader/" + readerId;
     }

@@ -35,8 +35,21 @@
             <input type="text" name="blacklists" readonly th:field="${reader.blacklists.size()}">
         </label>
         <p></p>
-        <label> All taken books</label>
-
+        <label> Taken books without Indebtedness</label>
+        <table>
+            <thead>
+            <tr>
+                <th> Title </th>
+                <th> Return Book</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="book : ${reader.specificBooks}" th:if="${book.blacklist != null}">
+                <td th:text="${book.book.bookName}"></td>
+                <td><a th:href="@{/book/return/(id=book.id)/(readerId=reader.id)}">return</a></td>
+            </tr>
+            </tbody>
+        </table>
         <label> Indebtedness </label>
         <table>
             <thead>
