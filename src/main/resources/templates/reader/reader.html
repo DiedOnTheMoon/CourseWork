@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html  xmlns:th="https://www.thymeleaf.org"
-        lang="en">
+<html xmlns:th="https://www.thymeleaf.org"
+      lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -35,41 +35,53 @@
             <input type="text" name="blacklists" readonly th:field="${reader.blacklists.size()}">
         </label>
         <p></p>
-        <label> Taken books without Indebtedness</label>
-        <table>
-            <thead>
-            <tr>
-                <th> Title </th>
-                <th> Return Book</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="book : ${reader.specificBooks}" th:if="${book.blacklist != null}">
-                <td th:text="${book.book.bookName}"></td>
-                <td><a th:href="@{/book/return/(id=book.id)/(readerId=reader.id)}">return</a></td>
-            </tr>
-            </tbody>
-        </table>
-        <label> Indebtedness </label>
-        <table>
-            <thead>
-            <tr>
-                <th> Title </th>
-                <th> Return Date</th>
-                <th> Price</th>
-                <th> Return Book</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="book : ${owed}" >
-                <td th:text="${book.specificBook.book.bookName}"></td>
-                <td th:text="${book.specificBook.returnDate}"></td>
-                <td th:text="${book.normalRepresentation()}"></td>
-                <td><a th:href="@{/book/return/(id=book.id)/(readerId=reader.id)}">return</a></td>
-            </tr>
-            </tbody>
-        </table>
-
     </form>
+    <label> Taken books without Indebtedness</label>
+    <p></p>
+    <form th:method="POST" th:action="@{/reader/filter/book}">
+        <label>Search
+            <input type="text" name="bookFilter">
+        </label>
+        <input type="submit" value="Search" >
+    </form>
+    <table>
+        <thead>
+        <tr>
+            <th> Title</th>
+            <th> Return Book</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="book : ${books}">
+            <td th:text="${book.book.bookName}"></td>
+            <td><a th:href="@{/book/return/(id=book.id)/(readerId=reader.id)}">return</a></td>
+        </tr>
+        </tbody>
+    </table>
+    <label> Indebtedness </label>
+    <form method="POST" th:action="@{/reader/filter/blacklistFilter}">
+        <label>Search
+            <input type="text" name="blacklistFilter">
+        </label>
+        <input type="submit" value="Search" >
+    </form>
+    <table>
+        <thead>
+        <tr>
+            <th> Title</th>
+            <th> Return Date</th>
+            <th> Price</th>
+            <th> Return Book</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="book : ${owed}">
+            <td th:text="${book.specificBook.book.bookName}"></td>
+            <td th:text="${book.specificBook.returnDate}"></td>
+            <td th:text="${book.normalRepresentation()}"></td>
+            <td><a th:href="@{/book/return/(id=book.id)/(readerId=reader.id)}">return</a></td>
+        </tr>
+        </tbody>
+    </table>
 </body>
 </html>

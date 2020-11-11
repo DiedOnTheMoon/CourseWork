@@ -18,6 +18,10 @@ public class Author {
     public Author() {
     }
 
+    public Author(String authorName){
+        this.authorName = authorName;
+    }
+
     public Author(Long id, String authorName, Set<Book> books) {
         this.id = id;
         this.authorName = authorName;

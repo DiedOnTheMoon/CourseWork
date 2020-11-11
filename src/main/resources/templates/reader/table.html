@@ -7,8 +7,13 @@
 </head>
 <body>
 
+    <form method="post" th:action="@{reader/filter/table}">
+        <label> Search
+            <input type="text" name="filter">
+            <input type="submit" value="Search">
+        </label>
+    </form>
     <table>
-
         <thead>
             <th> First name </th>
             <th> Last name </th>

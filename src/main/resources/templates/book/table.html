@@ -6,6 +6,12 @@
     <title>Book table</title>
 </head>
 <body>
+    <form method="post" th:action="@{/book/filter/}">
+        <label> Search
+            <input type="text" name="filter">
+            <input type="submit" value="Search">
+        </label>
+    </form>
     <table>
         <thead>
             <tr>

@@ -9,7 +9,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/book")
@@ -28,12 +30,12 @@ public class BookController {
     @GetMapping("/add")
     public String  getAddBook(Model model){
         model.addAttribute("book", new Book());
-        model.addAttribute("author", new Author());
         model.addAttribute("city", new City());
         model.addAttribute("publisher", new Publisher());
         model.addAttribute("specificBook", new SpecificBook());
         model.addAttribute("language", new Language());
-        model.addAttribute("genre", new Genre());
+        model.addAttribute("authors", "");
+        model.addAttribute("generes", "");
 
         return "book/add";
     }
@@ -41,22 +43,31 @@ public class BookController {
     @PostMapping("/add")
     public String addBook(
             Book book,
-            Author author,
+            String authors,
             City city,
             Publisher publisher,
             SpecificBook specificBook,
             Language language,
-            Genre genre
+            String generes
     ){
-        HashSet<Author> authors = new HashSet<>();
-        HashSet<Genre> genres = new HashSet<>();
+        Set<Genre> setGeneres = new HashSet<>();
+        Set<Author> setAuthors = new HashSet<>();
 
-        authors.add(author);
-        genres.add(genre);
+        String[] generesArr = generes.split(",");
+        String[] authorsArr = authors.split(",");
+
+        for(String item: generesArr){
+            setGeneres.add(new Genre(item));
+        }
+
+        for(String item: authorsArr){
+            setAuthors.add(new Author(item));
+        }
+
         publisher.setCity(city);
         book.setPublisher(publisher);
-        book.setAuthors(authors);
-        book.setGenres(genres);
+        book.setAuthors(setAuthors);
+        book.setGenres(setGeneres);
         book.setLanguage(language);
         specificBook.setBook(book);
         specificBook.setInPlace(true);
@@ -93,6 +104,14 @@ public class BookController {
         }
 
         return "redirect:/reader/" + readerId;
+    }
+
+    @PostMapping("/filter")
+    public String filter(@RequestParam(defaultValue = "") String filter, Model model){
+        model.addAttribute("books", bookRepository.findAll().stream()
+                .filter(b -> b.getBookName().startsWith(filter)).collect(Collectors.toSet()));
+
+        return "book/table";
     }
 
 }
