@@ -1,6 +1,9 @@
 package com.library.spring.models;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 @Entity
@@ -11,6 +14,8 @@ public class Author {
     @Column(name = "ID")
     private Long id;
     @Column(name = "NAME")
+    @NotBlank(message = "please fill Author name!")
+    @Length(min=3, max = 255, message = "author name is not correct (max=255, min=3)")
     private String authorName;
     @ManyToMany(mappedBy = "authors", cascade = CascadeType.ALL)
     private Set<Book> books;

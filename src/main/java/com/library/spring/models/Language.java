@@ -1,6 +1,9 @@
 package com.library.spring.models;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 @Entity
@@ -11,6 +14,8 @@ public class Language {
     @Column(name = "ID")
     private Long id;
     @Column(name = "NAME")
+    @NotBlank(message = "language cannot be blank")
+    @Length(min=4, max=255, message = "language length is not correct(min=4, max=255)")
     private String languageName;
     @OneToMany(mappedBy = "language", cascade = CascadeType.ALL)
     private Set<Book> books;

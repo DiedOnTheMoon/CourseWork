@@ -1,6 +1,9 @@
 package com.library.spring.models;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 import java.util.Set;
 
@@ -12,16 +15,28 @@ public class Reader {
     @Column(name = "ID")
     private Long id;
     @Column(name = "FIRST_NAME")
+    @NotBlank(message = "First name cannot be blank")
+    @Length(min=3, max=255, message = "First name length isn't correct (min=3, max=255)")
     private String firstName;
     @Column(name = "LAST_NAME")
+    @NotBlank(message = "Last name cannot be blank")
+    @Length(min=3, max=255, message = "Last name length isn't correct (min=3, max=255)")
     private String lastName;
     @Column(name = "DATE_OF_BIRTH")
+    @NotBlank(message = " cannot be blank")
+    @Length(min=3, max=255, message = "publisher length isn't correct (min=3, max=255)")
     private Date dateOfBirth;
     @Column(name = "ADDRESS")
+    @NotBlank(message = "publisher cannot be blank")
+    @Length(min=3, max=255, message = "publisher length isn't correct (min=3, max=255)")
     private String address;
     @Column(name = "PHONE")
+    @NotBlank(message = "publisher cannot be blank")
+    @Length(min=3, max=255, message = "publisher length isn't correct (min=3, max=255)")
     private String phone;
     @Column(name = "BEHAVIOR_RANK")
+    @NotBlank(message = "publisher cannot be blank")
+    @Length(min=3, max=255, message = "publisher length isn't correct (min=3, max=255)")
     private int behaviorRank;
     @OneToMany(mappedBy = "reader", cascade = CascadeType.ALL)
     private Set<Blacklist> blacklists;

@@ -1,6 +1,9 @@
 package com.library.spring.models;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,6 +15,8 @@ public class Genre {
     @Column(name = "ID")
     private Long id;
     @Column(name = "NAME")
+    @NotBlank(message = "genre cannot be blank")
+    @Length(min=4, max=255, message = "genres length is not correct (min=4, max=255)")
     private String genreName;
     @ManyToMany(mappedBy = "genres", cascade = CascadeType.ALL)
     private Set<Book> books = new HashSet<>();

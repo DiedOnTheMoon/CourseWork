@@ -1,6 +1,9 @@
 package com.library.spring.models;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 @Entity
@@ -11,6 +14,8 @@ public class Publisher {
     @Column(name = "ID")
     private Long id;
     @Column(name = "NAME")
+    @NotBlank(message = "publisher cannot be blank")
+    @Length(min=3, max=255, message = "publisher length isn't correct (min=3, max=255)")
     private String publisherName;
     @ManyToOne( fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "CITY_ID")

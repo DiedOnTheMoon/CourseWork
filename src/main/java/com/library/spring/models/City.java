@@ -1,5 +1,7 @@
 package com.library.spring.models;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -11,6 +13,7 @@ public class City {
     @Column(name = "ID")
     private Long id;
     @Column(name = "NAME")
+    @Length(min=3, max=255, message = "city name is not correct (min=3, max=255)")
     private String cityName;
     @OneToMany(mappedBy = "city", cascade = CascadeType.ALL)
     private Set<Publisher> publishers;

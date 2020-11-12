@@ -1,6 +1,12 @@
 package com.library.spring.models;
 
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.Range;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Set;
 
 @Entity
@@ -11,11 +17,14 @@ public class Book {
     @Column(name = "ID")
     private Long id;
     @Column(name = "NAME")
+    @NotBlank(message = "please fill Book name!")
+    @Length(min=1, max=255, message = "name is not correct(min=1, max=255)")
     private String bookName;
     @Column(name = "YEAR")
+    @Range(min=1900, max=2020, message = "year is not correct (min = 1900, max = 2020)")
     private Integer year;
     @Column(name = "PRICE")
-
+    @Range(min=1000, max=10000, message="price is not correct (min=10.00  max = 100.00)")
     private Integer price;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "LANGUAGE_ID", nullable = false)
