@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html   xmlns:th="https://www.thymeleaf.org"
+        lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form method="post" th:action="@{/specificBook/(id=${id})/add}" th:object="${specificBook}">
+        <label>
+            Shelf:
+            <input type="text" name="shelf" th:field="${specificBook.shelf}">
+        </label>
+        <label>
+            Rank:
+            <input type="text" name="rank" th:field="${specificBook.rank}">
+        </label>
+        <label>
+            Room:
+            <input type="text" name="room" th:field="${specificBook.room}">
+        </label>
+        <input type="submit" value="Add">
+    </form>
+</body>
+</html>

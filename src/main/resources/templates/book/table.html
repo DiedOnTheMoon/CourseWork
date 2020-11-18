@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book table</title>
+</head>
+<body>
+    <form method="post" th:action="@{/book/filter/}">
+        <label> Search
+            <input type="text" name="filter">
+            <input type="submit" value="Search">
+        </label>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th> Title </th>
+                <th> Author </th>
+                <th> Language </th>
+                <th> Publisher </th>
+                <th> Year </th>
+                <th> Price </th>
+                <th> Detailed view </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="book : ${books}">
+                <td th:text="${book.bookName}"></td>
+                <td th:text="${book.getAuthorsInString()}"></td>
+                <td th:text="${book.publisher.publisherName}"></td>
+                <td th:text="${book.year}"></td>
+                <td th:text="${book.price}"></td>
+                <td><a th:href="@{/book/(id=${book.id})}"> Detailed view</a></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

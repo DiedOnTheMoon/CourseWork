@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add New Book</title>
+</head>
+<body>
+    <div th:if="${param.error}">
+        Invalid input data.
+    </div>
+    <form th:action="@{/main/book/add}" method="post">
+        <label>Book Name: <br>
+            <input type="text" name="bookName" th:field="${book.bookName}">
+        </label>
+        <p></p>
+        <label>Year:<br>
+            <input type="text" name="year" th:field="${book.year}">
+        </label>
+        <p></p>
+        <label>Price:<br>
+            <input type="text" name="price" th:field="${book.price}">
+        </label>
+        <p></p>
+        <label>Genre:<br>
+            <input type="text" name="generes" th:value="${generes}">
+        </label>
+        <p></p>
+        <label>Author:<br>
+            <input type="text" name="authors" th:value="${authors}">
+        </label>
+        <p></p>
+        <label>Language:<br>
+            <input type="text" name="languageName" th:field="${language.languageName}">
+        </label>
+        <p></p>
+        <label>Publisher:<br>
+            <input type="text" name="publisherName" th:field="${publisher.publisherName}">
+        </label>
+        <p></p>
+        <label>City:<br>
+            <input type="text" name="cityName" th:field="${city.cityName}">
+        </label>
+        <p></p>
+        <label>Shelf:<br>
+            <input type="text" name="shelf" th:field="${specificBook.shelf}">
+        </label>
+        <p></p>
+        <label>Rank:<br>
+            <input type="text" name="rank" th:field="${specificBook.rank}">
+        </label>
+        <p></p>
+        <label>Room:<br>
+            <input type="text" name="room" th:field="${specificBook.room}">
+        </label>
+        <p></p>
+        <input type="submit" value="Add new book">
+    </form>
+</body>
+</html>
