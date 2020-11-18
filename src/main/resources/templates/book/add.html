@@ -1,59 +1,84 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
-<head>
+<head th:include="parts/common.html :: commonHead">
     <meta charset="UTF-8">
     <title>Add New Book</title>
 </head>
 <body>
+    <div th:include="parts/common.html :: navigation"> </div>
     <div th:if="${param.error}">
         Invalid input data.
     </div>
     <form th:action="@{/main/book/add}" method="post">
-        <label>Book Name: <br>
-            <input type="text" name="bookName" th:field="${book.bookName}">
-        </label>
+        <div class="form-group col-md-6">
+            <label>Book Name: <br>
+                <input type="text" name="bookName" th:field="${book.bookName}">
+            </label>
+        </div>
         <p></p>
-        <label>Year:<br>
-            <input type="text" name="year" th:field="${book.year}">
-        </label>
+        <div class="form-group col-md-6">
+            <label>Year:<br>
+                <input type="text" name="year" th:field="${book.year}">
+            </label>
+        </div>
         <p></p>
-        <label>Price:<br>
-            <input type="text" name="price" th:field="${book.price}">
-        </label>
+        <div class="form-group col-md-6">
+            <label>Price:<br>
+                <input type="text" name="price" th:field="${book.price}">
+            </label>
+        </div>
         <p></p>
-        <label>Genre:<br>
-            <input type="text" name="generes" th:value="${generes}">
-        </label>
+        <div class="form-group col-md-6">
+            <label>Genre:<br>
+                <input type="text" name="generes" th:value="${generes}">
+            </label>
+        </div>
         <p></p>
-        <label>Author:<br>
-            <input type="text" name="authors" th:value="${authors}">
-        </label>
+        <div class="form-group col-md-6">
+            <label>Author:<br>
+                <input type="text" name="authors" th:value="${authors}">
+            </label>
+        </div>
         <p></p>
-        <label>Language:<br>
-            <input type="text" name="languageName" th:field="${language.languageName}">
-        </label>
+        <div class="form-group col-md-6">
+            <label>Language:<br>
+                <input type="text" name="languageName" th:field="${language.languageName}">
+            </label>
+        </div>
         <p></p>
-        <label>Publisher:<br>
-            <input type="text" name="publisherName" th:field="${publisher.publisherName}">
-        </label>
+        <div class="form-group col-md-6">
+            <label>Publisher:<br>
+                <input type="text" name="publisherName" th:field="${publisher.publisherName}">
+            </label>
+        </div>
         <p></p>
-        <label>City:<br>
-            <input type="text" name="cityName" th:field="${city.cityName}">
-        </label>
+        <div class="form-group col-md-6">
+            <label>City:<br>
+                <input type="text" name="cityName" th:field="${city.cityName}">
+            </label>
+        </div>
         <p></p>
-        <label>Shelf:<br>
-            <input type="text" name="shelf" th:field="${specificBook.shelf}">
-        </label>
+        <div class="form-group col-md-6">
+            <label>Shelf:<br>
+                <input type="text" name="shelf" th:field="${specificBook.shelf}">
+            </label>
+        </div>
         <p></p>
-        <label>Rank:<br>
-            <input type="text" name="rank" th:field="${specificBook.rank}">
-        </label>
+        <div class="form-group col-md-6">
+            <label>Rank:<br>
+                <input type="text" name="rank" th:field="${specificBook.rank}">
+            </label>
+        </div>
         <p></p>
-        <label>Room:<br>
-            <input type="text" name="room" th:field="${specificBook.room}">
-        </label>
+        <div class="form-group col-md-6">
+            <label>Room:<br>
+                <input type="text" name="room" th:field="${specificBook.room}">
+            </label>
+        </div>
         <p></p>
-        <input type="submit" value="Add new book">
+        <div class="form-group col">
+            <input class="btn btn-dark" type="submit" value="Add new book">
+        </div>
     </form>
 </body>
 </html>

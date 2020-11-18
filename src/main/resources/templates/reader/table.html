@@ -1,28 +1,30 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org"
         lang="en">
-<head>
+<head th:include="parts/common.html :: commonHead">
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-
+    <div th:include="parts/common.html :: navigation"></div>
     <form method="post" th:action="@{reader/filter/table}">
-        <label> Search
-            <input type="text" name="filter">
-            <input type="submit" value="Search">
-        </label>
+        <div class="form-group col-md-1 pt-5">
+            <label> Search
+                <input type="text" name="filter">
+                <input class="btn btn-dark" type="submit" value="Search">
+            </label>
+        </div>
     </form>
-    <table>
-        <thead>
-            <th> First name </th>
-            <th> Last name </th>
-            <th> Date of birth </th>
-            <th> Address </th>
-            <th> Phone </th>
-            <th> Behavior rank </th>
-            <th> Number of books owed </th>
-            <th> Detail view </th>
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+            <th scope="col"> First name </th>
+            <th scope="col"> Last name </th>
+            <th scope="col"> Date of birth </th>
+            <th scope="col"> Address </th>
+            <th scope="col"> Phone </th>
+            <th scope="col"> Behavior rank </th>
+            <th scope="col"> Number of books owed </th>
+            <th scope="col"> Detail view </th>
         </thead>
         <tbody>
             <tr th:each="reader : ${readers}">
@@ -36,9 +38,6 @@
                 <td><a th:href="@{reader/(id=${reader.id})}"></a></td>
             </tr>
         </tbody>
-
-
     </table>
-
 </body>
 </html>

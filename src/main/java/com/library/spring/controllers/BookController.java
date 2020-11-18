@@ -83,7 +83,7 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public String getTable(@PathVariable String id,  Model model){
+    public String getSpecBookTable(@PathVariable String id,  Model model){
 
         model.addAttribute("books", bookRepository.findById(Long.parseLong(id)).get().getSpecificBooks());
 
@@ -114,4 +114,9 @@ public class BookController {
         return "book/table";
     }
 
+    @GetMapping("/table")
+    public String getBooksTable(Model model){
+        model.addAttribute("books", bookRepository.findAll());
+        return "book/table";
+    }
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
       lang="eng" >
-<head>
+<head th:include="parts/common.html :: commonHead">
     <title>Login</title>
 </head>
 <body>
@@ -12,20 +12,25 @@
     You have been logged out.
 </div>
 <form th:action="@{/login}" method="post">
-    <div>
-        <label> User Name :
-        <br>
-        <input type="text" name="username"/>
-        </label>
-    </div>
-
-    <div>
-        <label> Password:
+    <div class="row justify-content-md-center pt-5">
+        <div class="col-md-auto form-group">
+            <label class="form-label" for="username"> User Name : </label>
             <br>
-            <input type="password" name="password"/>
-        </label>
+            <input id="username" class="form-control" type="text" name="username"/>
+        </div>
     </div>
-    <div><input type="submit" value="Sign In"/></div>
+    <div class="row justify-content-md-center">
+        <div class="col-md-auto form-group">
+            <label class="form-label" for="password"> Password: </label>
+            <br>
+            <input id="password" class="form-control" type="password" name="password"/>
+        </div>
+    </div>
+    <div class="row justify-content-md-center ">
+        <div class="col-md-auto form-group">
+            <input class="btn btn-dark" type="submit" value="Sign In"/>
+        </div>
+    </div>
 </form>
 </body>
 </html>

@@ -1,54 +1,73 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org"
       lang="en">
-<head>
+<head th:include="parts/common.html :: commonHead">
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Reader</title>
 </head>
 <body>
+    <div th:include="parts/common.html :: navigation"></div>
     <form th:object="${reader}">
-        <label> First name:<p></p>
-            <input type="text" name="firstName" th:field="${reader.firstName}">
-        </label>
+        <div class="form-group col-md-1 pt-5">
+            <label> First name:<p></p>
+                <input type="text" name="firstName" th:field="${reader.firstName}">
+            </label>
+        </div>
         <p></p>
-        <label> Last name:<p></p>
-            <input type="text" name="lastName" th:field="${reader.lastName}">
-        </label>
+        <div class="form-group col-md-1">
+            <label> Last name:<p></p>
+                <input type="text" name="lastName" th:field="${reader.lastName}">
+            </label>
+        </div>
         <p></p>
-        <label> Date of birth:<p></p>
-            <input type="date" name="dateOfBirth" th:field="${reader.dateOfBirth}">
-        </label>
+        <div class="form-group col-md-1">
+            <label> Date of birth:<p></p>
+                <input type="date" name="dateOfBirth" th:field="${reader.dateOfBirth}">
+            </label>
+        </div>
         <p></p>
-        <label> Address:<p></p>
-            <input type="text" name="address" th:field="${reader.address}">
-        </label>
+        <div class="form-group col-md-1">
+            <label> Address:<p></p>
+                <input type="text" name="address" th:field="${reader.address}">
+            </label>
+        </div>
         <p></p>
-        <label> Phone:<p></p>
-            <input type="text" name="phone" th:field="${reader.phone}">
-        </label>
+        <div class="form-group col-md-1">
+            <label> Phone:<p></p>
+                <input type="text" name="phone" th:field="${reader.phone}">
+            </label>
+        </div>
         <p></p>
-        <label> Behavior rank:<p></p>
-            <input type="text" readonly name="behaviorRank" th:field="${reader.behaviorRank}">
-        </label>
+        <div class="form-group col-md-1">
+            <label> Behavior rank:<p></p>
+                <input type="text" readonly name="behaviorRank" th:field="${reader.behaviorRank}">
+            </label>
+        </div>
         <p></p>
-        <label>Number of books owed:<p></p>
-            <input type="text" name="blacklists" readonly th:field="${reader.blacklists.size()}">
-        </label>
+        <div class="form-group col-md-1">
+            <label>Number of books owed:<p></p>
+                <input type="text" name="blacklists" readonly th:field="${reader.blacklists.size()}">
+            </label>
+        </div>
         <p></p>
     </form>
     <label> Taken books without Indebtedness</label>
     <p></p>
     <form th:method="POST" th:action="@{/reader/filter/book}">
-        <label>Search
-            <input type="text" name="bookFilter">
-        </label>
-        <input type="submit" value="Search" >
+        <div class="form-group col-md-1 pt-3">
+            <label>Search
+                <input type="text" name="bookFilter">
+            </label>
+        </div>
+        <div class="form-group col-md-1">
+            <input type="submit" value="Search" >
+        </div>
     </form>
-    <table>
-        <thead>
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
         <tr>
-            <th> Title</th>
-            <th> Return Book</th>
+            <th scope="col"> Title</th>
+            <th scope="col"> Return Book</th>
         </tr>
         </thead>
         <tbody>
@@ -60,18 +79,22 @@
     </table>
     <label> Indebtedness </label>
     <form method="POST" th:action="@{/reader/filter/blacklistFilter}">
-        <label>Search
-            <input type="text" name="blacklistFilter">
-        </label>
-        <input type="submit" value="Search" >
+        <div class="form-group col-md-1 pt-3">
+            <label>Search
+                <input type="text" name="blacklistFilter">
+            </label>
+        </div>
+        <div>
+            <input class="btn btn-dark" type="submit" value="Search" >
+        </div>
     </form>
-    <table>
-        <thead>
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
         <tr>
-            <th> Title</th>
-            <th> Return Date</th>
-            <th> Price</th>
-            <th> Return Book</th>
+            <th scope="col"> Title</th>
+            <th scope="col"> Return Date</th>
+            <th scope="col"> Price</th>
+            <th scope="col"> Return Book</th>
         </tr>
         </thead>
         <tbody>

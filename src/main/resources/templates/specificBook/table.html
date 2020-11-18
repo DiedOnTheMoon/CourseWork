@@ -1,23 +1,24 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
       lang="en">
-<head>
+<head th:include="parts/common.html :: commonHead">
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-    <table>
-        <thead>
+    <div th:include="parts/common.html :: navigation"></div>
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
         <tr>
-            <th> Unique code </th>
-            <th> In place </th>
-            <th> Date of issue</th>
-            <th> Return date </th>
-            <th> shelf</th>
-            <th> rank </th>
-            <th> room </th>
-            <th> Edit </th>
-            <th> Delete </th>
+            <th scope="col"> Unique code </th>
+            <th scope="col"> In place </th>
+            <th scope="col"> Date of issue</th>
+            <th scope="col"> Return date </th>
+            <th scope="col"> Shelf</th>
+            <th scope="col"> Rank </th>
+            <th scope="col"> Room </th>
+            <th scope="col"> Edit </th>
+            <th scope="col"> Delete </th>
         </tr>
         </thead>
         <tbody>
