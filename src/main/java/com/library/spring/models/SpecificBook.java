@@ -1,8 +1,5 @@
 package com.library.spring.models;
 
-import org.apache.tomcat.jni.Local;
-import org.joda.time.DateTime;
-
 import javax.persistence.*;
 import java.util.Set;
 import java.time.LocalDate;
