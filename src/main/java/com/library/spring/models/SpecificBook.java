@@ -1,9 +1,11 @@
 package com.library.spring.models;
 
+import org.apache.tomcat.jni.Local;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
 import java.util.Set;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "SPECIFIC_BOOK")
@@ -17,9 +19,9 @@ public class SpecificBook {
     @Column(name = "IN_PLACE")
     private Boolean inPlace;
     @Column(name = "DATE_OF_ISSUE")
-    private DateTime dateOfIssue;
+    private LocalDate dateOfIssue;
     @Column(name = "RETURN_DATE")
-    private DateTime returnDate;
+    private LocalDate returnDate;
     @Column(name = "SHELF")
     private String shelf;
     @Column(name = "RANK")
@@ -38,7 +40,7 @@ public class SpecificBook {
 
     }
 
-    public SpecificBook(Long id, String uniqueCode, Boolean inPlace, DateTime dateOfIssue, DateTime returnDate,
+    public SpecificBook(Long id, String uniqueCode, Boolean inPlace, LocalDate dateOfIssue, LocalDate returnDate,
                         String shelf, String rank, String room, Book book) {
         this.id = id;
         this.uniqueCode = uniqueCode;
@@ -67,19 +69,19 @@ public class SpecificBook {
         this.uniqueCode = uniqueCode;
     }
 
-    public DateTime getDateOfIssue() {
+    public LocalDate getDateOfIssue() {
         return dateOfIssue;
     }
 
-    public void setDateOfIssue(DateTime dateOfIssue) {
+    public void setDateOfIssue(LocalDate dateOfIssue) {
         this.dateOfIssue = dateOfIssue;
     }
 
-    public DateTime getReturnDate() {
+    public LocalDate getReturnDate() {
         return returnDate;
     }
 
-    public void setReturnDate(DateTime returnDate) {
+    public void setReturnDate(LocalDate returnDate) {
         this.returnDate = returnDate;
     }
 
