@@ -6,8 +6,10 @@ import com.library.spring.repository.BookRepository;
 import com.library.spring.repository.SpecificBookRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -29,15 +31,23 @@ public class SpecificBookController {
     }
 
     @PostMapping("/edit")
-    public String saveEdit(SpecificBook book){
-        specificBookRepository.save(book);
-        return "/main/main";
+    public String saveEdit(SpecificBook book, BindingResult bindingResult, Model model){
+        var ret = "redirect:/book/" + book.getBook().getId();
+        if(bindingResult.hasErrors()){
+            var map = ControllersUtil.getErrors(bindingResult);
+            model.mergeAttributes(map);
+            model.addAttribute("book", book);
+            ret = "specificBook/edit";
+        }else{
+            specificBookRepository.save(book);
+        }
+        return ret;
     }
 
     @DeleteMapping("/delete/{id}")
     public String deleteBookById(@PathVariable String id){
         specificBookRepository.deleteById(Long.parseLong(id));
-        return "main/main";
+        return "book/table";
     }
 
     @GetMapping("/{id}/add")
@@ -48,18 +58,28 @@ public class SpecificBookController {
 
         return "specificBook/add";
     }
-    //сделать
+
     @PostMapping("/{id}/add")
-    public String addNew(@PathVariable Long id, SpecificBook specificBook, Model model){
+    public String addNew(@PathVariable Long id,
+                         @Valid SpecificBook specificBook,
+                         BindingResult bindingResult,
+                         Model model){
 
-        Book book = bookRepository.findById(id).get();
-        Set<SpecificBook> books = book.getSpecificBooks();
+        var ret = "redirect:book/" + id;
+        if(bindingResult.hasErrors())
+        {
+            var map = ControllersUtil.getErrors(bindingResult);
+            model.mergeAttributes(map);
 
-        books.add(specificBook);
-        book.setSpecificBooks(books);
+        }else {
+            Book book = bookRepository.findById(id).get();
+            Set<SpecificBook> books = book.getSpecificBooks();
 
-        bookRepository.save(book);
-        // как-то там можно
+            books.add(specificBook);
+            book.setSpecificBooks(books);
+
+            bookRepository.save(book);
+        }// как-то там можно
         // specificBookRepository.save(specificBook);
 
         return "";
@@ -71,8 +91,8 @@ public class SpecificBookController {
         model.addAttribute("books", bookRepository.findById(id).get().getSpecificBooks().stream()
             .filter(b->b.getUniqueCode().startsWith(filter))
             .collect(Collectors.toSet()));
+        model.addAttribute("id", id);
 
         return "specificBook/table";
     }
-
 }

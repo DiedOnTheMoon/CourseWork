@@ -6,8 +6,10 @@ import com.library.spring.models.SpecificBook;
 import com.library.spring.repository.ReaderRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -30,9 +32,18 @@ public class ReaderController {
     }
 
     @PostMapping("/add")
-    public String addReader(Reader reader){
-        readerRepository.save(reader);
-        return "main/main";
+    public String addReader(@Valid Reader reader, BindingResult bindingResult, Model model){
+        var ret = "redirect:reader/table";
+        if(bindingResult.hasErrors()){
+            var map = ControllersUtil.getErrors(bindingResult);
+            model.mergeAttributes(map);
+            model.addAttribute("reader", reader);
+            ret = "reader/add";
+        }else{
+            readerRepository.save(reader);
+        }
+
+        return ret;
     }
 
     @GetMapping("/table")

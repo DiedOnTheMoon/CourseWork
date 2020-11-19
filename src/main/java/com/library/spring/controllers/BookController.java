@@ -6,9 +6,12 @@ import com.library.spring.repository.BookRepository;
 import com.library.spring.repository.SpecificBookRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -42,50 +45,70 @@ public class BookController {
 
     @PostMapping("/add")
     public String addBook(
-            Book book,
-            String authors,
-            City city,
-            Publisher publisher,
-            SpecificBook specificBook,
-            Language language,
-            String generes
+            @Valid Book book,
+            @Valid String authors,
+            @Valid City city,
+            @Valid Publisher publisher,
+            @Valid SpecificBook specificBook,
+            @Valid Language language,
+            String generes,
+            BindingResult bindingResult,
+            Model model
     ){
-        Set<Genre> setGeneres = new HashSet<>();
-        Set<Author> setAuthors = new HashSet<>();
+        String ret = "redirect:/book/table";
+        var map = ControllersUtil.isCorrect(authors, generes);
+        if(bindingResult.hasErrors() || !map.isEmpty()){
+            Map<String, String> errors = ControllersUtil.getErrors(bindingResult);
 
-        String[] generesArr = generes.split(",");
-        String[] authorsArr = authors.split(",");
+            model.mergeAttributes(errors);
+            model.mergeAttributes(map);
+            model.addAttribute("book", book);
+            model.addAttribute("city", city);
+            model.addAttribute("publisher", publisher);
+            model.addAttribute("specificBook", specificBook);
+            model.addAttribute("language", language);
+            model.addAttribute("authors", authors);
+            model.addAttribute("generes", generes);
 
-        for(String item: generesArr){
-            setGeneres.add(new Genre(item));
+            ret = "book/add";
+        }else {
+            Set<Genre> setGeneres = new HashSet<>();
+            Set<Author> setAuthors = new HashSet<>();
+
+            String[] generesArr = generes.split(",");
+            String[] authorsArr = authors.split(",");
+
+            for (String item : generesArr) {
+                setGeneres.add(new Genre(item));
+            }
+
+            for (String item : authorsArr) {
+                setAuthors.add(new Author(item));
+            }
+
+            publisher.setCity(city);
+            book.setPublisher(publisher);
+            book.setAuthors(setAuthors);
+            book.setGenres(setGeneres);
+            book.setLanguage(language);
+            specificBook.setBook(book);
+            specificBook.setInPlace(true);
+            specificBook.setUniqueCode(UUID.randomUUID().toString() + "/" + book.getBookName() +
+                    "/" + book.getLanguage().getLanguageName() + "/" + book.getPublisher().getPublisherName() +
+                    "/" + book.getYear() + "/" + book.getPrice());
+
+            specificBookRepository.save(specificBook);
+
+            System.out.println(specificBook);
         }
-
-        for(String item: authorsArr){
-            setAuthors.add(new Author(item));
-        }
-
-        publisher.setCity(city);
-        book.setPublisher(publisher);
-        book.setAuthors(setAuthors);
-        book.setGenres(setGeneres);
-        book.setLanguage(language);
-        specificBook.setBook(book);
-        specificBook.setInPlace(true);
-        specificBook.setUniqueCode(UUID.randomUUID().toString() + "/" + book.getBookName() +
-                "/" + book.getLanguage().getLanguageName() + "/" + book.getPublisher().getPublisherName() +
-                "/" + book.getYear() + "/" + book.getPrice());
-
-        specificBookRepository.save(specificBook);
-
-        System.out.println(specificBook);
-
-        return "/main/main";
+        return ret;
     }
 
     @GetMapping("/{id}")
-    public String getSpecBookTable(@PathVariable String id,  Model model){
+    public String getSpecBookTable(@PathVariable Long id,  Model model){
 
-        model.addAttribute("books", bookRepository.findById(Long.parseLong(id)).get().getSpecificBooks());
+        model.addAttribute("books", bookRepository.findById(id).get().getSpecificBooks());
+        model.addAttribute("id", id);
 
         return "specificBook/table";
     }
