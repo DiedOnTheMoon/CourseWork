@@ -10,14 +10,14 @@ import java.util.Set;
 @Table(name = "AUTHOR")
 public class Author {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private Long id;
     @Column(name = "NAME")
     @NotBlank(message = "please fill Author name!")
     @Length(min=3, max = 255, message = "author name is not correct (max=255, min=3)")
     private String authorName;
-    @ManyToMany(mappedBy = "authors", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
     private Set<Book> books;
 
     public Author() {

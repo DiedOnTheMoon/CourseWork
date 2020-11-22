@@ -18,22 +18,32 @@
             <tr>
                 <th scope="col"> Title </th>
                 <th scope="col"> Author </th>
+                <th scope="col"> Genre </th>
                 <th scope="col"> Language </th>
                 <th scope="col"> Publisher </th>
                 <th scope="col"> Year </th>
                 <th scope="col"> Price </th>
+                <th scope="col"> Edit </th>
+                <th scope="col"> Delete </th>
                 <th scope="col"> Detailed view </th>
             </tr>
         </thead>
         <tbody>
             <tr th:each="book : ${books}">
                 <td th:text="${book.bookName}"></td>
-                <td th:text="${book.getAuthorsInString()}"></td>
+                <td th:text="${book.author.authorName}"></td>
+                <td th:text="${book.genre.genreName}"></td>
                 <td th:text="${book.getLanguage().languageName}"></td>
                 <td th:text="${book.publisher.publisherName}"></td>
                 <td th:text="${book.year}"></td>
                 <td th:text="${book.price}"></td>
-                <td><a th:href="@{/book/(id=${book.id})}"> Detailed view</a></td>
+                <td><a th:href="@{/book/edit/{id}(id=${book.id})}">Edit</a></td>
+                <td>
+                    <form th:method="DELETE" th:action="@{/book/delete/{id}(id=${book.id})}">
+                        <input type="submit" value="DELETE">
+                    </form>
+                </td>
+                <td><a th:href="@{/book/{id}(id=${book.id})}"> Detailed view</a></td>
             </tr>
         </tbody>
     </table>

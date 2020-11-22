@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head th:include="parts/common.html :: commonHead">
+    <meta charset="UTF-8">
+    <title>Edit</title>
+</head>
+<body>
+    <div th:include="parts/common.html :: navigation"> </div>
+    <form th:action="@{/book/edit/{id}(id=${book.id})}" th:method="PATCH">
+        <div class="form-group col-md-6">
+            <label>Book Name: </label>
+            <br/>
+            <input type="text" name="bookName" th:field="${book.bookName}">
+            <div style="color: red" th:if="${#fields.hasErrors('book.bookName')}" th:errors="${book.bookName}">BookName error</div>
+        </div>
+        <p></p>
+        <div class="form-group col-md-6">
+            <label>Year:</label>
+            <br/>
+            <input type="text" name="year" th:field="${book.year}">
+            <div style="color: red" th:if="${#fields.hasErrors('book.year')}" th:errors="${book.year}">Year error</div>
+        </div>
+        <p></p>
+        <div class="form-group col-md-6">
+            <label>Price:</label>
+            <br/>
+            <input type="text" name="price" th:field="${book.price}">
+            <div style="color: red" th:if="${#fields.hasErrors('book.price')}" th:errors="${book.price}">Price error</div>
+        </div>
+        <p></p>
+        <div class="form-group col-md-6">
+            <label>Genre:</label><br/>
+            <input type="text" name="genreName" th:value="${book.genre.genreName}"/>
+            <div style="color: red" th:if="${#fields.hasErrors('book.genre.genreName')}" th:errors="${book.price}">Genre error</div>
+        </div>
+        <p></p>
+        <div class="form-group col-md-6">
+            <label>Author:</label>
+            <br/>
+            <input type="text" name="authors" th:value="${book.author.authorName}"/>
+            <div style="color: red" th:if="${#fields.hasErrors('book.author.authorName')}" th:errors="${book.author.authorName}">Price error</div>
+        </div>
+        <p></p>
+        <div class="form-group col-md-6">
+            <label>Language:</label>
+            <br/>
+            <input type="text" name="languageName" th:field="${book.language.languageName}"/>
+            <div style="color: red" th:if="${#fields.hasErrors('book.language.languageName')}" th:errors="${book.language.languageName}">Language error</div>
+        </div>
+        <p></p>
+        <div class="form-group col-md-6">
+            <label>Publisher:</label>
+            <br/>
+            <input type="text" name="publisherName" th:field="${book.publisher.publisherName}"/>
+            <div style="color: red" th:if="${#fields.hasErrors('book.publisher.publisherName')}" th:errors="${book.publisher.publisherName}">PublisherName errors</div>
+        </div>
+        <p></p>
+        <div class="form-group col-md-6">
+            <label>City:</label>
+            <br/>
+            <input type="text" name="cityName" th:field="${book.publisher.city.cityName}"/>
+            <div style="color: red" th:if="${#fields.hasErrors('book.publisher.city.cityName')}" th:errors="${book.publisher.city.cityName}">CityName error</div>
+        </div>
+        <p></p>
+        <div class="form-group col">
+            <input class="btn btn-dark" type="submit" value="Edit Book">
+        </div>
+    </form>
+</body>
+</html>

@@ -25,25 +25,22 @@ public class ReaderController {
     }
 
     @GetMapping("/add")
-    public String addReader(Model model){
-
-        model.addAttribute("reader", new Reader());
+    public String addReader(@ModelAttribute("reader") Reader reader){
         return "reader/add";
     }
 
     @PostMapping("/add")
-    public String addReader(@Valid Reader reader, BindingResult bindingResult, Model model){
-        var ret = "redirect:reader/table";
+    public String addReader(
+            @ModelAttribute("reader") @Valid Reader reader,
+            BindingResult bindingResult){
+
         if(bindingResult.hasErrors()){
-            var map = ControllersUtil.getErrors(bindingResult);
-            model.mergeAttributes(map);
-            model.addAttribute("reader", reader);
-            ret = "reader/add";
-        }else{
-            readerRepository.save(reader);
+            return "reader/add";
         }
 
-        return ret;
+        readerRepository.save(reader);
+
+        return "redirect:reader/table";
     }
 
     @GetMapping("/table")
@@ -62,7 +59,7 @@ public class ReaderController {
     }
 
     @GetMapping("/{id}")
-    public String reader(@PathVariable String id, Model model){
+    public String reader(@PathVariable("id") Long id, Model model){
 
         Reader reader = readerRepository.findById(id).get();
 
@@ -77,7 +74,7 @@ public class ReaderController {
 
     @PostMapping("/filter/blacklist")
     public String blacklistFilter(@RequestParam(defaultValue = "") String blacklistFilter,
-                         @RequestParam String id,
+                         @RequestParam Long id,
                          Model model){
         Reader reader =  readerRepository.findById(id).get();
         Set<Blacklist> blacklists;
@@ -111,7 +108,7 @@ public class ReaderController {
 
     @PostMapping("/filter/book")
     public String bookFilter(@RequestParam(defaultValue = "") String bookFilter,
-                         @RequestParam String id,
+                         @RequestParam Long id,
                          Model model){
         Reader reader =  readerRepository.findById(id).get();
         Set<Blacklist> blacklists;
@@ -143,5 +140,12 @@ public class ReaderController {
         return "reader/reader";
     }
 
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable("id") Long id, Model model){
+
+        model.addAttribute("reader", readerRepository.findById(id).get());
+
+        return "reader/edit";
+    }
 
 }

@@ -4,15 +4,13 @@ import com.library.spring.models.*;
 import com.library.spring.repository.BlacklistRepository;
 import com.library.spring.repository.BookRepository;
 import com.library.spring.repository.SpecificBookRepository;
+import com.library.spring.service.BookService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -31,65 +29,48 @@ public class BookController {
     }
 
     @GetMapping("/add")
-    public String  getAddBook(Model model){
-        model.addAttribute("book", new Book());
-        model.addAttribute("city", new City());
-        model.addAttribute("publisher", new Publisher());
-        model.addAttribute("specificBook", new SpecificBook());
-        model.addAttribute("language", new Language());
-        model.addAttribute("authors", "");
-        model.addAttribute("generes", "");
+    public String  getAddBook(
+            @ModelAttribute("book") Book book,
+            @ModelAttribute("city") City city,
+            @ModelAttribute("publisher") Publisher publisher,
+            @ModelAttribute("specificBook") SpecificBook specificBook,
+            @ModelAttribute("language") Language language,
+            @ModelAttribute("author") Author author,
+            @ModelAttribute("genre") Genre genre
+    ){
 
         return "book/add";
     }
 
     @PostMapping("/add")
     public String addBook(
-            @Valid Book book,
-            @Valid String authors,
-            @Valid City city,
-            @Valid Publisher publisher,
-            @Valid SpecificBook specificBook,
-            @Valid Language language,
-            String generes,
-            BindingResult bindingResult,
-            Model model
+            @ModelAttribute("book") @Valid Book book,
+            BindingResult bookBinding,
+            @ModelAttribute("city") @Valid City city,
+            BindingResult cityBinding,
+            @ModelAttribute("publisher") @Valid Publisher publisher,
+            BindingResult publisherBinding,
+            @ModelAttribute("specificBook") @Valid SpecificBook specificBook,
+            BindingResult specificBookBinding,
+            @ModelAttribute("language") @Valid Language language,
+            BindingResult languageBinding,
+            @ModelAttribute("genre") @Valid Genre genre,
+            BindingResult genreBinding,
+            @ModelAttribute("author") @Valid Author author,
+            BindingResult authorBinding
     ){
-        String ret = "redirect:/book/table";
-        var map = ControllersUtil.isCorrect(authors, generes);
-        if(bindingResult.hasErrors() || !map.isEmpty()){
-            Map<String, String> errors = ControllersUtil.getErrors(bindingResult);
+        if(bookBinding.hasErrors() || cityBinding.hasErrors() || publisherBinding.hasErrors()
+            || specificBookBinding.hasErrors() || languageBinding.hasErrors() || genreBinding.hasErrors()
+            || authorBinding.hasErrors()){
 
-            model.mergeAttributes(errors);
-            model.mergeAttributes(map);
-            model.addAttribute("book", book);
-            model.addAttribute("city", city);
-            model.addAttribute("publisher", publisher);
-            model.addAttribute("specificBook", specificBook);
-            model.addAttribute("language", language);
-            model.addAttribute("authors", authors);
-            model.addAttribute("generes", generes);
 
-            ret = "book/add";
+            return "book/add";
         }else {
-            Set<Genre> setGeneres = new HashSet<>();
-            Set<Author> setAuthors = new HashSet<>();
-
-            String[] generesArr = generes.split(",");
-            String[] authorsArr = authors.split(",");
-
-            for (String item : generesArr) {
-                setGeneres.add(new Genre(item));
-            }
-
-            for (String item : authorsArr) {
-                setAuthors.add(new Author(item));
-            }
 
             publisher.setCity(city);
             book.setPublisher(publisher);
-            book.setAuthors(setAuthors);
-            book.setGenres(setGeneres);
+            book.setAuthor(author);
+            book.setGenre(genre);
             book.setLanguage(language);
             specificBook.setBook(book);
             specificBook.setInPlace(true);
@@ -97,24 +78,22 @@ public class BookController {
                     "/" + book.getLanguage().getLanguageName() + "/" + book.getPublisher().getPublisherName() +
                     "/" + book.getYear() + "/" + book.getPrice());
 
-            specificBookRepository.save(specificBook);
-
-            System.out.println(specificBook);
+            BookService.addNewBook(specificBook);
         }
-        return ret;
+        return "redirect:/book/table/";
     }
 
     @GetMapping("/{id}")
-    public String getSpecBookTable(@PathVariable Long id,  Model model){
+    public String getSpecBookTable(@PathVariable("id") String id, Model model){
 
-        model.addAttribute("books", bookRepository.findById(id).get().getSpecificBooks());
+        model.addAttribute("books", bookRepository.findById(Long.parseLong(id)).get().getSpecificBooks());
         model.addAttribute("id", id);
 
         return "specificBook/table";
     }
 
     @PostMapping("/return/{id}/{readerId}")
-    public String returnBook(@PathVariable Long id, @PathVariable String readerId){
+    public String returnBook(@PathVariable("id") Long id, @PathVariable("readerId") Long readerId){
 
         SpecificBook book = specificBookRepository.findById(id).get();
 
@@ -126,7 +105,7 @@ public class BookController {
             blacklistRepository.delete(book.getBlacklist());
         }
 
-        return "redirect:/reader/" + readerId;
+        return "redirect:/reader/" + readerId + "/";
     }
 
     @PostMapping("/filter")
@@ -141,5 +120,34 @@ public class BookController {
     public String getBooksTable(Model model){
         model.addAttribute("books", bookRepository.findAll());
         return "book/table";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String editBook(@PathVariable("id") Long id, Model model){
+        Book book = bookRepository.findById(id).get();
+        model.addAttribute("book", book);
+
+        return "book/edit";
+    }
+
+    @PatchMapping("/edit/{id}")
+    public String saveBook(
+            @ModelAttribute("id") @PathVariable("id") Long id,
+            @ModelAttribute("book") @Valid Book book,
+            BindingResult bindingResult
+    ){
+        if(bindingResult.hasErrors()){
+            return "book/edit";
+        }
+
+        BookService.updateBook(book);
+
+        return "redirect:/book/table/";
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public String deleteBook(@PathVariable("id") Long id){
+        bookRepository.deleteById(id);
+        return "redirect:/book/table/";
     }
 }

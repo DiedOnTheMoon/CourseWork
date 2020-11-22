@@ -9,29 +9,34 @@
     <div th:include="parts/common.html :: navigation"></div>
     <form th:method="post" th:action="@{/reader/add}" th:object="${reader}">
         <div class="form-group col-md-1 pt-5">
-            <label>First name:
-                <input type="text" name="firstName" th:field="${reader.firstName}">
-            </label>
+            <label>First name:</label>
+            <br/>
+            <input type="text" name="firstName" th:field="${reader.firstName}">
+            <div style="color: red" th:if="${#fields.hasErrors('reader.firstName')}" th:errors="${reader.firstName}">FN error</div>
         </div>
         <div class="form-group col-md-1">
-            <label>Last name:
-                <input type="text" name="lastName" th:field="${reader.lastName}">
-            </label>
+            <label>Last name: </label>
+            <br/>
+            <input type="text" name="lastName" th:field="${reader.lastName}">
+            <div style="color: red" th:if="${#fields.hasErrors('reader.lastName')}" th:errors="${reader.lastName}">LN error</div>
         </div>
         <div class="form-group col-md-1">
-            <label>Date of birth:
-                <input type="date" name="dateOfBirth" th:field="${reader.dateOfBirth}">
-            </label>
+            <label>Date of birth:</label>
+            <br/>
+            <input type="date" name="dateOfBirth" th:field="${reader.dateOfBirth}">
+            <div style="color: red" th:if="${#fields.hasErrors('reader.dateOfBirth')}" th:errors="${reader.dateOfBirth}">DB error</div>
         </div>
         <div class="form-group col-md-1">
-            <label>Address:
-                <input type="text" name="address" th:field="${reader.address}">
-            </label>
+            <label>Address: </label>
+            <br/>
+            <input type="text" name="address" th:field="${reader.address}">
+            <div style="color: red" th:if="${#fields.hasErrors('reader.address')}" th:errors="${reader.address}">Address error</div>
         </div>
         <div class="form-group col-md-1">
-            <label>Phone:
-                <input type="text" name="phone" th:field="${reader.phone}">
-            </label>
+            <label>Phone: </label>
+            <br/>
+            <input type="text" name="phone" th:field="${reader.phone}">
+            <div style="color: red" th:if="${#fields.hasErrors('reader.phone')}" th:errors="${reader.phone}">Phone error</div>
         </div>
         <div class="form-group col-md-1">
             <input class="btn btn-dark" type="submit" value="Add Reader">

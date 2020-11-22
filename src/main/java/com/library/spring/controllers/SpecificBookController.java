@@ -25,68 +25,61 @@ public class SpecificBookController {
     }
 
     @GetMapping("/edit/{id}")
-    public String showEdit(@PathVariable String id, Model model){
-        model.addAttribute("book", specificBookRepository.findById(Long.parseLong(id)).get());
+    public String showEdit(@PathVariable("id") Long id, Model model){
+        model.addAttribute("book", specificBookRepository.findById(id).get());
         return "specificBook/edit";
     }
 
     @PostMapping("/edit")
-    public String saveEdit(SpecificBook book, BindingResult bindingResult, Model model){
-        var ret = "redirect:/book/" + book.getBook().getId();
+    public String saveEdit(
+            @ModelAttribute("book") @Valid SpecificBook book, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
-            var map = ControllersUtil.getErrors(bindingResult);
-            model.mergeAttributes(map);
-            model.addAttribute("book", book);
-            ret = "specificBook/edit";
-        }else{
-            specificBookRepository.save(book);
+            return  "specificBook/edit";
         }
-        return ret;
+
+        specificBookRepository.save(book);
+
+        return "redirect:/book/" + book.getBook().getId();
     }
 
     @DeleteMapping("/delete/{id}")
-    public String deleteBookById(@PathVariable String id){
-        specificBookRepository.deleteById(Long.parseLong(id));
+    public String deleteBookById(@PathVariable("id") Long id){
+        specificBookRepository.deleteById(id);
         return "book/table";
     }
 
     @GetMapping("/{id}/add")
-    public String add(@PathVariable Long id, Model model){
-
-        model.addAttribute("id", id);
-        model.addAttribute("specificBook", new SpecificBook());
+    public String add(
+            @ModelAttribute("id") @PathVariable("id") Long id,
+            @ModelAttribute("specificBook") SpecificBook specificBook){
 
         return "specificBook/add";
     }
 
     @PostMapping("/{id}/add")
-    public String addNew(@PathVariable Long id,
-                         @Valid SpecificBook specificBook,
-                         BindingResult bindingResult,
-                         Model model){
-
-        var ret = "redirect:book/" + id;
+    public String addNew(
+            @ModelAttribute("id") @PathVariable("id") Long id,
+            @ModelAttribute("specificBook") @Valid SpecificBook specificBook,
+            BindingResult bindingResult
+            ){
         if(bindingResult.hasErrors())
         {
-            var map = ControllersUtil.getErrors(bindingResult);
-            model.mergeAttributes(map);
+            return "specificBook/add";
+        }
+        Book book = bookRepository.findById(id).get();
+        Set<SpecificBook> books = book.getSpecificBooks();
 
-        }else {
-            Book book = bookRepository.findById(id).get();
-            Set<SpecificBook> books = book.getSpecificBooks();
+        books.add(specificBook);
+        book.setSpecificBooks(books);
 
-            books.add(specificBook);
-            book.setSpecificBooks(books);
+        bookRepository.save(book);
 
-            bookRepository.save(book);
-        }// как-то там можно
-        // specificBookRepository.save(specificBook);
 
-        return "";
+        return "redirect:book/" + id;
     }
 
     @PostMapping("/{id}/filter")
-    public String filter(@RequestParam(defaultValue = "") String filter,@PathVariable Long id, Model model){
+    public String filter(@RequestParam(defaultValue = "") String filter,@PathVariable("id") Long id, Model model){
 
         model.addAttribute("books", bookRepository.findById(id).get().getSpecificBooks().stream()
             .filter(b->b.getUniqueCode().startsWith(filter))

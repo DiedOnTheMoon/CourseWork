@@ -13,7 +13,7 @@ import java.util.Set;
 @Table(name = "BOOK")
 public class Book {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private Long id;
     @Column(name = "NAME")
@@ -32,20 +32,12 @@ public class Book {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "PUBLISHER_ID", nullable = false)
     private Publisher   publisher;
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "AUTHOR_BOOK",
-            joinColumns = @JoinColumn(name = "BOOK_ID"),
-            inverseJoinColumns = @JoinColumn(name = "AUTHOR_ID")
-    )
-    private Set<Author> authors;
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "GENRE_BOOK",
-            joinColumns = @JoinColumn(name = "BOOK_ID"),
-            inverseJoinColumns = @JoinColumn(name = "GENRE_ID")
-    )
-    private Set<Genre> genres;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "AUTHOR_ID", nullable = false)
+    private Author author;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name="GENRE_ID", nullable = false)
+    private Genre genre;
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     private Set<SpecificBook> specificBooks;
 
@@ -53,15 +45,15 @@ public class Book {
     }
 
     public Book(Long id, String bookName, Integer year, Integer price, Language language, Publisher publisher,
-                Set<Author> authors, Set<Genre> genres, Set<SpecificBook> specificBooks) {
+                Author author, Genre genre, Set<SpecificBook> specificBooks) {
         this.id = id;
         this.bookName = bookName;
         this.year = year;
         this.price = price;
         this.language = language;
         this.publisher = publisher;
-        this.authors = authors;
-        this.genres = genres;
+        this.author = author;
+        this.genre = genre;
         this.specificBooks = specificBooks;
     }
 
@@ -113,20 +105,20 @@ public class Book {
         this.language = language;
     }
 
-    public Set<Author> getAuthors() {
-        return authors;
+    public Author getAuthor() {
+        return author;
     }
 
-    public void setAuthors(Set<Author> authors) {
-        this.authors = authors;
+    public void setAuthor(Author author) {
+        this.author = author;
     }
 
-    public Set<Genre> getGenres() {
-        return genres;
+    public Genre getGenre() {
+        return genre;
     }
 
-    public void setGenres(Set<Genre> genres) {
-        this.genres = genres;
+    public void setGenre(Genre genre) {
+        this.genre = genre;
     }
 
     public Set<SpecificBook> getSpecificBooks() {
@@ -137,18 +129,4 @@ public class Book {
         this.specificBooks = specificBooks;
     }
 
-    public String getAuthorsInString(){
-        StringBuilder str = new StringBuilder();
-
-        for(Author a : authors){
-
-            str.append(a.getAuthorName()).append(",");
-        }
-
-        if(str.charAt(str.length() - 1) == ','){
-            str.deleteCharAt(str.length() - 1);
-        }
-
-        return str.toString();
-    }
 }

@@ -11,15 +11,15 @@ import java.util.Set;
 @Table(name = "GENRE")
 public class Genre {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private Long id;
     @Column(name = "NAME")
     @NotBlank(message = "genre cannot be blank")
     @Length(min=4, max=255, message = "genres length is not correct (min=4, max=255)")
     private String genreName;
-    @ManyToMany(mappedBy = "genres", cascade = CascadeType.ALL)
-    private Set<Book> books = new HashSet<>();
+    @OneToMany(mappedBy = "genre", cascade = CascadeType.ALL)
+    private Set<Book> books;
 
     public Genre() {
     }

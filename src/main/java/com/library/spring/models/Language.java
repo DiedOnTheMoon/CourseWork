@@ -10,7 +10,7 @@ import java.util.Set;
 @Table(name = "LANGUAGE")
 public class Language {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private Long id;
     @Column(name = "NAME")

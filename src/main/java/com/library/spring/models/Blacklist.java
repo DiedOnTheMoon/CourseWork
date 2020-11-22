@@ -6,7 +6,7 @@ import javax.persistence.*;
 @Table(name = "BLACKLIST")
 public class Blacklist {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private Long id;
     @Column(name = "ALL_PRICE")
