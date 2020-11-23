@@ -26,22 +26,36 @@ public class Book {
     @Column(name = "PRICE")
     @Range(min=1000, max=10000, message="price is not correct (min=10.00  max = 100.00)")
     private Integer price;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "LANGUAGE_ID", nullable = false)
     private Language language;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "PUBLISHER_ID", nullable = false)
     private Publisher   publisher;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "AUTHOR_ID", nullable = false)
     private Author author;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name="GENRE_ID", nullable = false)
     private Genre genre;
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "book", orphanRemoval = true, cascade = CascadeType.ALL)
     private Set<SpecificBook> specificBooks;
 
     public Book() {
+    }
+
+    public Book(Book book){
+
+        this.id = book.id;
+        this.bookName = book.bookName;
+        this.year = book.year;
+        this.price = book.price;
+        this.language = book.language;
+        this.publisher = book.publisher;
+        this.author = book.author;
+        this.genre = book.genre;
+        this.specificBooks = book.specificBooks;
+
     }
 
     public Book(Long id, String bookName, Integer year, Integer price, Language language, Publisher publisher,

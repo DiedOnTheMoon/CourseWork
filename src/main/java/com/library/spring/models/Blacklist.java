@@ -11,11 +11,11 @@ public class Blacklist {
     private Long id;
     @Column(name = "ALL_PRICE")
     private Long allPrice;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "READER_ID")
     private Reader reader;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
     @JoinColumn(name = "SPECIFIC_BOOK_ID", referencedColumnName = "ID")
     private SpecificBook specificBook;
 

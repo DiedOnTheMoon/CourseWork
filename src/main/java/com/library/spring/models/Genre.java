@@ -18,7 +18,7 @@ public class Genre {
     @NotBlank(message = "genre cannot be blank")
     @Length(min=4, max=255, message = "genres length is not correct (min=4, max=255)")
     private String genreName;
-    @OneToMany(mappedBy = "genre", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "genre", orphanRemoval = true, cascade = CascadeType.ALL)
     private Set<Book> books;
 
     public Genre() {
@@ -28,6 +28,10 @@ public class Genre {
         this.id = id;
         this.genreName = genreName;
         this.books = books;
+    }
+
+    public Genre(Genre genre){
+        this(genre.id, genre.genreName, genre.books);
     }
 
     public Genre(String genreName){

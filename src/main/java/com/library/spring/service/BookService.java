@@ -14,7 +14,9 @@ public class BookService {
     private static  PublisherRepository publisherRepository;
     private static  LanguageRepository languageRepository;
 
-    public BookService(BookRepository bookRepository, SpecificBookRepository specificBookRepository, CityRepository cityRepository, AuthorRepository authorRepository, GenreRepository genreRepository, PublisherRepository publisherRepository, LanguageRepository languageRepository) {
+    public BookService(BookRepository bookRepository, SpecificBookRepository specificBookRepository,
+                       CityRepository cityRepository, AuthorRepository authorRepository, GenreRepository genreRepository,
+                       PublisherRepository publisherRepository, LanguageRepository languageRepository) {
         BookService.bookRepository = bookRepository;
         BookService.specificBookRepository = specificBookRepository;
         BookService.cityRepository = cityRepository;
@@ -66,7 +68,7 @@ public class BookService {
     }
 
     private static Genre findGenre(Genre genre){
-        Genre genreFromDb = genreRepository.findGenreByGenreName(genre.getGenreName());
+        Genre genreFromDb = genreRepository.findByGenreName(genre.getGenreName());
         return genreFromDb == null ? genre : genreFromDb;
     }
 

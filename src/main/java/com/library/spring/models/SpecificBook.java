@@ -41,12 +41,12 @@ public class SpecificBook {
     @NotBlank(message = "room can't be blank")
     @Length(min=3, max=255, message = "room length should be >= 3 and <= 255 ")
     private String room;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "BOOK_ID", nullable = false)
     private Book book;
     @ManyToMany(mappedBy = "specificBooks", cascade = CascadeType.ALL)
     private Set<Reader> readers;
-    @OneToOne(mappedBy = "specificBook")
+    @OneToOne(mappedBy = "specificBook", orphanRemoval = true)
     private Blacklist blacklist;
 
     public SpecificBook() {

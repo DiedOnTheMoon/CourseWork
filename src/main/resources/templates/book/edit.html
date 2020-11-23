@@ -30,36 +30,36 @@
         <p></p>
         <div class="form-group col-md-6">
             <label>Genre:</label><br/>
-            <input type="text" name="genreName" th:value="${book.genre.genreName}"/>
-            <div style="color: red" th:if="${#fields.hasErrors('book.genre.genreName')}" th:errors="${book.price}">Genre error</div>
+            <input type="text" name="genreName" th:field="${genre.genreName}"/>
+            <div style="color: red" th:if="${#fields.hasErrors('genre.genreName')}" th:errors="${genre.genreName}">Genre error</div>
         </div>
         <p></p>
         <div class="form-group col-md-6">
             <label>Author:</label>
             <br/>
-            <input type="text" name="authors" th:value="${book.author.authorName}"/>
-            <div style="color: red" th:if="${#fields.hasErrors('book.author.authorName')}" th:errors="${book.author.authorName}">Price error</div>
+            <input type="text" name="authorName" th:field="${author.authorName}"/>
+            <div style="color: red" th:if="${#fields.hasErrors('author.authorName')}" th:errors="${author.authorName}">Author error</div>
         </div>
         <p></p>
         <div class="form-group col-md-6">
             <label>Language:</label>
             <br/>
-            <input type="text" name="languageName" th:field="${book.language.languageName}"/>
-            <div style="color: red" th:if="${#fields.hasErrors('book.language.languageName')}" th:errors="${book.language.languageName}">Language error</div>
+            <input type="text" name="languageName" th:field="${language.languageName}"/>
+            <div style="color: red" th:if="${#fields.hasErrors('language.languageName')}" th:errors="${language.languageName}">Language error</div>
         </div>
         <p></p>
         <div class="form-group col-md-6">
             <label>Publisher:</label>
             <br/>
-            <input type="text" name="publisherName" th:field="${book.publisher.publisherName}"/>
-            <div style="color: red" th:if="${#fields.hasErrors('book.publisher.publisherName')}" th:errors="${book.publisher.publisherName}">PublisherName errors</div>
+            <input type="text" name="publisherName" th:field="${publisher.publisherName}"/>
+            <div style="color: red" th:if="${#fields.hasErrors('publisher.publisherName')}" th:errors="${publisher.publisherName}">PublisherName errors</div>
         </div>
         <p></p>
         <div class="form-group col-md-6">
             <label>City:</label>
             <br/>
-            <input type="text" name="cityName" th:field="${book.publisher.city.cityName}"/>
-            <div style="color: red" th:if="${#fields.hasErrors('book.publisher.city.cityName')}" th:errors="${book.publisher.city.cityName}">CityName error</div>
+            <input type="text" name="cityName" th:field="${city.cityName}"/>
+            <div style="color: red" th:if="${#fields.hasErrors('city.cityName')}" th:errors="${city.cityName}">CityName error</div>
         </div>
         <p></p>
         <div class="form-group col">

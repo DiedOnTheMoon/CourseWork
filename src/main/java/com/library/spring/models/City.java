@@ -17,7 +17,7 @@ public class City {
     @NotBlank(message = "city should not be blank")
     @Length(min=3, max=255, message = "city name is not correct (min=3, max=255)")
     private String cityName;
-    @OneToMany(mappedBy = "city", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "city", orphanRemoval = true, cascade = CascadeType.ALL)
     private Set<Publisher> publishers;
 
     public City() {

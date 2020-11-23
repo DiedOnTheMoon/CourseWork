@@ -17,10 +17,10 @@ public class Publisher {
     @NotBlank(message = "publisher cannot be blank")
     @Length(min=3, max=255, message = "publisher length isn't correct (min=3, max=255)")
     private String publisherName;
-    @ManyToOne( fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "CITY_ID")
     private City city;
-    @OneToMany(mappedBy = "publisher", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "publisher", orphanRemoval = true, cascade = CascadeType.ALL)
     private Set<Book> books;
 
     public Publisher() {

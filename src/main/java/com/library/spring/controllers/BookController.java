@@ -123,9 +123,21 @@ public class BookController {
     }
 
     @GetMapping("/edit/{id}")
-    public String editBook(@PathVariable("id") Long id, Model model){
+    public String editBook(@PathVariable("id") Long id,
+                           @ModelAttribute("genre") Genre genre,
+                           @ModelAttribute("author") Author author,
+                           @ModelAttribute("publisher") Publisher publisher,
+                           @ModelAttribute("city") City city,
+                           @ModelAttribute("language") Language language,
+                           Model model){
         Book book = bookRepository.findById(id).get();
         model.addAttribute("book", book);
+        genre.setGenreName(book.getGenre().getGenreName());
+        author.setAuthorName(book.getAuthor().getAuthorName());
+        language.setLanguageName(book.getLanguage().getLanguageName());
+        city.setCityName(book.getPublisher().getCity().getCityName());
+        publisher.setPublisherName(book.getPublisher().getPublisherName());
+        publisher.setCity(city);
 
         return "book/edit";
     }
@@ -134,11 +146,28 @@ public class BookController {
     public String saveBook(
             @ModelAttribute("id") @PathVariable("id") Long id,
             @ModelAttribute("book") @Valid Book book,
-            BindingResult bindingResult
+            BindingResult bindingResult,
+            @ModelAttribute("genre") @Valid Genre genre,
+            BindingResult genreBinding,
+            @ModelAttribute("author") @Valid Author author,
+            BindingResult authorBinding,
+            @ModelAttribute("language") @Valid Language language,
+            BindingResult languageBinding,
+            @ModelAttribute("publisher") @Valid Publisher publisher,
+            BindingResult publisherBinding,
+            @ModelAttribute("city") @Valid City city,
+            BindingResult cityBinding
     ){
-        if(bindingResult.hasErrors()){
+        if(bindingResult.hasErrors() || genreBinding.hasErrors() || authorBinding.hasErrors() ||
+                publisherBinding.hasErrors() || cityBinding.hasErrors() || languageBinding.hasErrors()){
             return "book/edit";
         }
+
+        book.setLanguage(language);
+        book.setGenre(genre);
+        book.setAuthor(author);
+        book.setPublisher(publisher);
+        book.getPublisher().setCity(city);
 
         BookService.updateBook(book);
 
