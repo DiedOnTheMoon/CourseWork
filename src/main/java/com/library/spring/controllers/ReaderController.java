@@ -40,7 +40,7 @@ public class ReaderController {
 
         readerRepository.save(reader);
 
-        return "redirect:reader/table";
+        return "redirect:reader/table/";
     }
 
     @GetMapping("/table")

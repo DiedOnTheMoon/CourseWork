@@ -3,6 +3,7 @@ package com.library.spring.models;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 @Entity
@@ -13,6 +14,7 @@ public class City {
     @Column(name = "ID")
     private Long id;
     @Column(name = "NAME")
+    @NotBlank(message = "city should not be blank")
     @Length(min=3, max=255, message = "city name is not correct (min=3, max=255)")
     private String cityName;
     @OneToMany(mappedBy = "city", cascade = CascadeType.ALL)

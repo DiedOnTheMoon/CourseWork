@@ -1,11 +1,18 @@
 package com.library.spring.models;
 
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.UniqueElements;
+
 import javax.persistence.*;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PastOrPresent;
 import java.util.Set;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "SPECIFIC_BOOK")
+@Table(name = "SPECIFIC_BOOK", uniqueConstraints = @UniqueConstraint(columnNames = {"SHELF", "RANK", "ROOM"}))
 public class SpecificBook {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -16,14 +23,23 @@ public class SpecificBook {
     @Column(name = "IN_PLACE")
     private Boolean inPlace;
     @Column(name = "DATE_OF_ISSUE")
+    @PastOrPresent(message = "date Of Issue must be present")
+    @FutureOrPresent(message = "date of Issue must be present")
     private LocalDate dateOfIssue;
     @Column(name = "RETURN_DATE")
+    @Future(message = "return Date must be in future")
     private LocalDate returnDate;
     @Column(name = "SHELF")
+    @NotBlank(message = "shelf can't be blank")
+    @Length(min=3, max=255, message = "shelf length should be >=3 and <= 255")
     private String shelf;
     @Column(name = "RANK")
+    @NotBlank(message = "rank can't be blank")
+    @Length(min=3, max=255, message = "rank length should be >=3 and <= 255")
     private String rank;
     @Column(name = "ROOM")
+    @NotBlank(message = "room can't be blank")
+    @Length(min=3, max=255, message = "room length should be >= 3 and <= 255 ")
     private String room;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "BOOK_ID", nullable = false)

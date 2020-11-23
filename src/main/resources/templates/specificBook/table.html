@@ -7,7 +7,7 @@
 </head>
 <body>
     <div th:include="parts/common.html :: navigation"></div>
-    <form method="post" th:action="@{specificBook/(id=${id})/filter/table}">
+    <form method="post" th:action="@{specificBook/{id}(id=${id})/filter/table}">
         <div class="form-group col-md-1 pt-5">
             <label> Search
                 <input type="text" name="filter">
@@ -38,8 +38,8 @@
             <td th:text="${book.shelf}"></td>
             <td th:text="${book.rank}"></td>
             <td th:text="${book.room}"></td>
-            <td><a th:href="@{/specificBook/edit/(id = book.id)}" th:action="set">Edit</a></td>
-            <td><a th:href="@{/specificBook/delete/(id = book.id)}" th:action="delete">Delete</a></td>
+            <td><a th:href="@{/specificBook/edit/{id}(id=${book.id})}" th:action="set">Edit</a></td>
+            <td><a th:href="@{/specificBook/delete/{id}(id=${book.id})}" th:action="delete">Delete</a></td>
         </tr>
         </tbody>
     </table>

@@ -2,25 +2,27 @@ package com.library.spring.service;
 
 import com.library.spring.models.*;
 import com.library.spring.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class BookService {
-    @Autowired
-    private static BookRepository bookRepository;
-    @Autowired
-    private static SpecificBookRepository specificBookRepository;
-    @Autowired
-    private static CityRepository cityRepository;
-    @Autowired
-    private static AuthorRepository authorRepository;
-    @Autowired
-    private static GenreRepository genreRepository;
-    @Autowired
-    private static PublisherRepository publisherRepository;
-    @Autowired
-    private static LanguageRepository languageRepository;
+    private static  BookRepository bookRepository;
+    private static  SpecificBookRepository specificBookRepository;
+    private static  CityRepository cityRepository;
+    private static  AuthorRepository authorRepository;
+    private static  GenreRepository genreRepository;
+    private static  PublisherRepository publisherRepository;
+    private static  LanguageRepository languageRepository;
+
+    public BookService(BookRepository bookRepository, SpecificBookRepository specificBookRepository, CityRepository cityRepository, AuthorRepository authorRepository, GenreRepository genreRepository, PublisherRepository publisherRepository, LanguageRepository languageRepository) {
+        BookService.bookRepository = bookRepository;
+        BookService.specificBookRepository = specificBookRepository;
+        BookService.cityRepository = cityRepository;
+        BookService.authorRepository = authorRepository;
+        BookService.genreRepository = genreRepository;
+        BookService.publisherRepository = publisherRepository;
+        BookService.languageRepository = languageRepository;
+    }
 
     public static void addNewBook(SpecificBook specificBook){
         Genre genre = findGenre(specificBook.getBook().getGenre());
@@ -35,7 +37,16 @@ public class BookService {
         specificBook.getBook().setAuthor(author);
         specificBook.getBook().setLanguage(language);
 
-        specificBookRepository.save(specificBook);
+        Book book = bookRepository.findBookByAuthorAuthorNameAndLanguageLanguageNameAndPublisherPublisherNameAndPublisherCityCityNameAndGenreGenreName
+                (author.getAuthorName(), language.getLanguageName(), publisher.getPublisherName(), city.getCityName(),
+                        genre.getGenreName());
+        if(book == null){
+            specificBookRepository.save(specificBook);
+        }else{
+            specificBook.setBook(book);
+            book.getSpecificBooks().add(specificBook);
+            bookRepository.save(book);
+        }
     }
 
     public static void updateBook(Book book){
@@ -55,27 +66,27 @@ public class BookService {
     }
 
     private static Genre findGenre(Genre genre){
-        Genre genreFromDb = genreRepository.findOneByGenreName(genre.getGenreName());
+        Genre genreFromDb = genreRepository.findGenreByGenreName(genre.getGenreName());
         return genreFromDb == null ? genre : genreFromDb;
     }
 
     private static City findCity(City city){
-        City cityFromDb = cityRepository.findOneByCityName(city.getCityName());
+        City cityFromDb = cityRepository.findCityByCityName(city.getCityName());
         return cityFromDb == null ? city : cityFromDb;
     }
 
     private static Author findAuthor(Author author){
-        Author authFromDb = authorRepository.findOneByAuthorName(author.getAuthorName());
+        Author authFromDb = authorRepository.findAuthorByAuthorName(author.getAuthorName());
         return  authFromDb == null ? author : authFromDb;
     }
 
     private static Publisher findPublisher(Publisher publisher){
-        Publisher publisherFromDb = publisherRepository.findOneByPublisherName(publisher.getPublisherName());
+        Publisher publisherFromDb = publisherRepository.findPublisherByPublisherName(publisher.getPublisherName());
         return publisherFromDb == null ? publisher : publisherFromDb;
     }
 
     private static Language findLanguage(Language language){
-        Language languageFromDb = languageRepository.findOneByLanguageName(language.getLanguageName());
+        Language languageFromDb = languageRepository.findLanguageByLanguageName(language.getLanguageName());
         return  languageFromDb == null ? language : languageFromDb;
     }
 }
