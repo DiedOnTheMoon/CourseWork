@@ -7,34 +7,34 @@
 </head>
 <body>
     <div th:include="parts/common.html :: navigation"></div>
-    <form th:object="${reader}">
+    <div>
         <div class="form-group col-md-1 pt-5">
             <label> First name:<p></p>
-                <input type="text" name="firstName" th:field="${reader.firstName}">
+                <input type="text" readonly name="firstName" th:field="${reader.firstName}">
             </label>
         </div>
         <p></p>
         <div class="form-group col-md-1">
             <label> Last name:<p></p>
-                <input type="text" name="lastName" th:field="${reader.lastName}">
+                <input type="text" readonly name="lastName" th:field="${reader.lastName}">
             </label>
         </div>
         <p></p>
         <div class="form-group col-md-1">
             <label> Date of birth:<p></p>
-                <input type="date" name="dateOfBirth" th:field="${reader.dateOfBirth}">
+                <input type="date" readonly name="dateOfBirth" th:field="${reader.dateOfBirth}">
             </label>
         </div>
         <p></p>
         <div class="form-group col-md-1">
             <label> Address:<p></p>
-                <input type="text" name="address" th:field="${reader.address}">
+                <input type="text" readonly name="address" th:field="${reader.address}">
             </label>
         </div>
         <p></p>
         <div class="form-group col-md-1">
             <label> Phone:<p></p>
-                <input type="text" name="phone" th:field="${reader.phone}">
+                <input type="text" readonly name="phone" th:field="${reader.phone}">
             </label>
         </div>
         <p></p>
@@ -46,11 +46,11 @@
         <p></p>
         <div class="form-group col-md-1">
             <label>Number of books owed:<p></p>
-                <input type="text" name="blacklists" readonly th:field="${reader.blacklists.size()}">
+                <input type="text" name="blacklists" readonly th:text="${reader.blacklists?.size()}">
             </label>
         </div>
         <p></p>
-    </form>
+    </div>
     <label> Taken books without Indebtedness</label>
     <p></p>
     <form th:method="POST" th:action="@{/reader/filter/book}">
@@ -73,7 +73,11 @@
         <tbody>
         <tr th:each="book : ${books}">
             <td th:text="${book.book.bookName}"></td>
-            <td><a th:href="@{/book/return/{id}(id=${book.id})/{readerId}(readerId=${reader.id})}">return</a></td>
+            <td>
+                <form th:method="POST" th:action="@{/book/return/{id}/{readerId}(readerId=${reader.id}, id=${book.id})}">
+                    <input type="submit" value="return">
+                </form>
+            </td>
         </tr>
         </tbody>
     </table>
@@ -102,7 +106,11 @@
             <td th:text="${book.specificBook.book.bookName}"></td>
             <td th:text="${book.specificBook.returnDate}"></td>
             <td th:text="${book.normalRepresentation()}"></td>
-            <td><a th:href="@{/book/return/{id}(id=${book.id})/{readerId}(readerId=${reader.id})}">return</a></td>
+            <td>
+                <form th:method="POST" th:action="@{/book/return/{id}/{readerId}(readerId=${reader.id}, id=${book.id})}">
+                    <input type="submit" value="return">
+                </form>
+            </td>
         </tr>
         </tbody>
     </table>

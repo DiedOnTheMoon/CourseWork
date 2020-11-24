@@ -3,7 +3,10 @@ package com.library.spring.controllers;
 import com.library.spring.models.Blacklist;
 import com.library.spring.models.Reader;
 import com.library.spring.models.SpecificBook;
+import com.library.spring.models.SpecificBookReader;
 import com.library.spring.repository.ReaderRepository;
+import com.library.spring.repository.SpecificBookRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,10 +21,12 @@ import java.util.stream.Collectors;
 public class ReaderController {
     private String blacklistFilter;
     private String bookFilter;
+    private final SpecificBookRepository specificBookRepository;
     private final ReaderRepository readerRepository;
 
-    public ReaderController(ReaderRepository readerRepository) {
+    public ReaderController(ReaderRepository readerRepository, SpecificBookRepository specificBookRepository) {
         this.readerRepository = readerRepository;
+        this.specificBookRepository = specificBookRepository;
     }
 
     @GetMapping("/add")
@@ -38,6 +43,7 @@ public class ReaderController {
             return "reader/add";
         }
 
+        reader.setBehaviorRank(0);
         readerRepository.save(reader);
 
         return "redirect:reader/table/";
@@ -64,8 +70,8 @@ public class ReaderController {
         Reader reader = readerRepository.findById(id).get();
 
         model.addAttribute("reader", reader);
-        model.addAttribute("books", reader.getSpecificBooks().stream()
-                .filter(b -> b.getBlacklist() == null)
+        model.addAttribute("books", reader.getSpecificBooksReader().stream()
+                .filter(b -> !b.getReturn()).map(SpecificBookReader::getSpecificBook)
                 .collect(Collectors.toSet()));
         model.addAttribute("owed", reader.getBlacklists());
 
@@ -92,11 +98,14 @@ public class ReaderController {
         }
 
         if(bookFilter != null && !bookFilter.isBlank()){
-            books = reader.getSpecificBooks().stream()
+            books = reader.getSpecificBooksReader().stream()
+                    .filter(SpecificBookReader::getReturn).map(SpecificBookReader::getSpecificBook)
                     .filter(b -> b.getBook().getBookName().startsWith(bookFilter))
                     .collect(Collectors.toSet());
         }else {
-            books = reader.getSpecificBooks();
+            books = reader.getSpecificBooksReader().stream()
+                    .filter(SpecificBookReader::getReturn).map(SpecificBookReader::getSpecificBook)
+                    .collect(Collectors.toSet());
         }
 
         model.addAttribute("reader", reader);
@@ -124,12 +133,17 @@ public class ReaderController {
         }
 
         if(bookFilter != null && !bookFilter.isBlank()){
-            books = reader.getSpecificBooks().stream()
+            books = reader.getSpecificBooksReader().stream()
+                    .filter(SpecificBookReader::getReturn)
+                    .map(SpecificBookReader::getSpecificBook)
                     .filter(b -> b.getBook().getBookName().startsWith(bookFilter))
                     .collect(Collectors.toSet());
             this.bookFilter = bookFilter;
         }else {
-            books = reader.getSpecificBooks();
+            books = reader.getSpecificBooksReader().stream()
+                    .filter(SpecificBookReader::getReturn)
+                    .map(SpecificBookReader::getSpecificBook)
+                    .collect(Collectors.toSet());
             this.bookFilter = "";
         }
 
@@ -148,4 +162,38 @@ public class ReaderController {
         return "reader/edit";
     }
 
+    @GetMapping("/take/{id}")
+    public String take(
+            @ModelAttribute("id") @PathVariable("id") Long id,
+            Model model){
+        model.addAttribute("readers", readerRepository.findAll());
+        model.addAttribute("specificBook", new SpecificBook());
+        return "reader/take";
+    }
+
+    @PostMapping("/take/{id}/{readerId}")
+    public String postTake(
+            @ModelAttribute("id") @PathVariable("id") Long id,
+            @PathVariable("readerId") Long readerId,
+            @ModelAttribute("specificBook") SpecificBook specificBook,
+            BindingResult bindingResult
+    ){
+        if(bindingResult.hasErrors() || specificBook.getDateOfIssue() == null){
+            return "redirect:/reader/take/" + id + "/";
+        }
+
+        SpecificBook specificBookFromDB = specificBookRepository.findById(id).get();
+        Reader reader = readerRepository.findById(readerId).get();
+        specificBookFromDB.setDateOfIssue(specificBook.getDateOfIssue());
+        specificBookFromDB.setReturnDate(specificBook.getReturnDate());
+        specificBookFromDB.setInPlace(false);
+        SpecificBookReader specificBookReader = new SpecificBookReader();
+        specificBookReader.setReturn(false);
+        specificBookReader.setReader(reader);
+        specificBookReader.setSpecificBook(specificBookFromDB);
+        reader.getSpecificBooksReader().add(specificBookReader);
+        readerRepository.save(reader);
+
+        return "redirect:/book/table/";
+    }
 }

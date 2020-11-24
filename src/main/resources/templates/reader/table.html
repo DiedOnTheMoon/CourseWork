@@ -35,7 +35,7 @@
                 <td th:text="${reader.phone}"></td>
                 <td th:text="${reader.behaviorRank}"></td>
                 <td th:text="${reader.blacklists.size()}"></td>
-                <td><a th:href="@{reader/{id}(id=${reader.id})}"></a></td>
+                <td><a th:href="@{/reader/{id}(id=${reader.id})}">view</a></td>
             </tr>
         </tbody>
     </table>

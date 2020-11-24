@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+      lang="en">
+<head th:include="parts/common.html :: commonHead">
+    <meta charset="UTF-8">
+    <title>Take</title>
+</head>
+<body>
+<div th:include="parts/common.html :: navigation"></div>
+<form method="post" th:action="@{reader/filter/table}">
+    <div class="form-group col-md-1 pt-5">
+        <label> Search
+            <input type="text" name="filter">
+            <input class="btn btn-dark" type="submit" value="Search">
+        </label>
+    </div>
+</form>
+<div>
+
+</div>
+<table class="table table-striped table-bordered">
+    <thead class="table-dark">
+    <th scope="col"> First name </th>
+    <th scope="col"> Last name </th>
+    <th scope="col"> Date of birth </th>
+    <th scope="col"> Address </th>
+    <th scope="col"> Phone </th>
+    <th scope="col"> Behavior rank </th>
+    <th scope="col"> Number of books owed </th>
+    <th scope="col"> Date of Issue </th>
+    <th scope="col"> Date of Return </th>
+    <th scope="col"> Take </th>
+    </thead>
+    <tbody>
+    <tr th:each="reader : ${readers}">
+        <td th:text="${reader.firstName}"></td>
+        <td th:text="${reader.lastName}"></td>
+        <td th:text="${reader.dateOfBirth}"></td>
+        <td th:text="${reader.address}"></td>
+        <td th:text="${reader.phone}"></td>
+        <td th:text="${reader.behaviorRank}"></td>
+        <td th:text="${reader.blacklists.size()}"></td>
+        <form th:method="POST" th:action="@{/reader/take/{id}/{readerId} (id=${id}, readerId=${reader.id})}">
+            <div class="form-group col-md-1">
+                <td>
+                    <input type="date" name="dateOfIssue" th:field="${specificBook.dateOfIssue}">
+                    <div style="color: red" th:if="${#fields.hasErrors('specificBook.dateOfIssue')}" th:errors="${specificBook.dateOfIssue}">Date error</div>
+                </td>
+                <td>
+                    <input type="date" name="returnDate" th:field="${specificBook.returnDate}">
+                    <div style="color: red" th:if="${#fields.hasErrors('specificBook.returnDate')}" th:errors="${specificBook.dateOfIssue}">Date error</div>
+                </td>
+            </div>
+            <td>
+                <input type="submit" value="TAKE">
+            </td>
+        </form>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

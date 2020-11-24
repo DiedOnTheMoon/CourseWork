@@ -25,6 +25,7 @@
             <th scope="col"> Shelf</th>
             <th scope="col"> Rank </th>
             <th scope="col"> Room </th>
+            <th scope="col"> Take </th>
             <th scope="col"> Edit </th>
             <th scope="col"> Delete </th>
         </tr>
@@ -33,13 +34,21 @@
         <tr th:each="book : ${books}">
             <td th:text="${book.uniqueCode}"></td>
             <td th:text="${book.inPlace} ? 'in place' : 'on hands'"></td>
-            <td th:text="${book.dateOfIssue} ?: ''"></td>
-            <td th:text="${book.returnDate} ?: ''"></td>
+            <td th:text="${book.dateOfIssue} ?: 'blank'"></td>
+            <td th:text="${book.returnDate} ?: 'blank'"></td>
             <td th:text="${book.shelf}"></td>
             <td th:text="${book.rank}"></td>
             <td th:text="${book.room}"></td>
-            <td><a th:href="@{/specificBook/edit/{id}(id=${book.id})}" th:action="set">Edit</a></td>
-            <td><a th:href="@{/specificBook/delete/{id}(id=${book.id})}" th:action="delete">Delete</a></td>
+            <td>
+                <form th:method="GET" th:action="@{/reader/take/{id}(id=${book.id})}">
+                    <input type="submit" th:disabled="${book.inPlace == false}" value="TAKE">
+                </form>
+            </td><td><a th:href="@{/specificBook/edit/{id}(id=${book.id})}" >Edit</a></td>
+            <td>
+                <form th:method="DELETE" th:action="@{/specificBook/delete/{id}(id=${book.id})}">
+                    <input type="submit" value="DELETE">
+                </form>
+            </td>
         </tr>
         </tbody>
     </table>

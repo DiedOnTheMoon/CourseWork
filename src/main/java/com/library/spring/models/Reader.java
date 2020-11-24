@@ -1,9 +1,12 @@
 package com.library.spring.models;
 
 import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Past;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
 
@@ -23,33 +26,26 @@ public class Reader {
     @Length(min=3, max=255, message = "Last name length isn't correct (min=3, max=255)")
     private String lastName;
     @Column(name = "DATE_OF_BIRTH")
-    @NotBlank(message = " cannot be blank")
-    @Length(min=3, max=255, message = "publisher length isn't correct (min=3, max=255)")
-    private Date dateOfBirth;
+    @Past(message = "date of Birth should be in past")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dateOfBirth;
     @Column(name = "ADDRESS")
-    @NotBlank(message = "publisher cannot be blank")
-    @Length(min=3, max=255, message = "publisher length isn't correct (min=3, max=255)")
+    @NotBlank(message = "address cannot be blank")
+    @Length(min=3, max=255, message = "address length isn't correct (min=3, max=255)")
     private String address;
     @Column(name = "PHONE")
-    @NotBlank(message = "publisher cannot be blank")
-    @Length(min=3, max=255, message = "publisher length isn't correct (min=3, max=255)")
+    @NotBlank(message = "phone cannot be blank")
+    @Length(min=3, max=255, message = "phone length isn't correct (min=3, max=255)")
     private String phone;
     @Column(name = "BEHAVIOR_RANK")
-    @NotBlank(message = "publisher cannot be blank")
-    @Length(min=3, max=255, message = "publisher length isn't correct (min=3, max=255)")
     private int behaviorRank;
     @OneToMany(mappedBy = "reader", orphanRemoval = true, cascade = CascadeType.ALL)
     private Set<Blacklist> blacklists;
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "SPECIFIC_BOOK_READER",
-            joinColumns = @JoinColumn(name="READER_ID"),
-            inverseJoinColumns = @JoinColumn(name = "SPECIFIC_BOOK_ID")
-    )
-    private Set<SpecificBook> specificBooks;
+    @OneToMany(mappedBy = "reader", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<SpecificBookReader> specificBooksReader;
 
-    public Reader(Long id, String firstName, String lastName, Date dateOfBirth, String address, String phone,
-                  int behaviorRank, Set<Blacklist> blacklists) {
+    public Reader(Long id, String firstName, String lastName, LocalDate dateOfBirth, String address,
+                  String phone, int behaviorRank, Set<Blacklist> blacklists, Set<SpecificBookReader> specificBooksReader) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -58,6 +54,7 @@ public class Reader {
         this.phone = phone;
         this.behaviorRank = behaviorRank;
         this.blacklists = blacklists;
+        this.specificBooksReader = specificBooksReader;
     }
 
     public Reader() {
@@ -88,11 +85,11 @@ public class Reader {
         this.lastName = lastName;
     }
 
-    public Date getDateOfBirth() {
+    public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
@@ -128,11 +125,11 @@ public class Reader {
         this.blacklists = blacklists;
     }
 
-    public Set<SpecificBook> getSpecificBooks() {
-        return specificBooks;
+    public Set<SpecificBookReader> getSpecificBooksReader() {
+        return specificBooksReader;
     }
 
-    public void setSpecificBooks(Set<SpecificBook> specificBooks) {
-        this.specificBooks = specificBooks;
+    public void setSpecificBooksReader(Set<SpecificBookReader> specificBooksReader) {
+        this.specificBooksReader = specificBooksReader;
     }
 }

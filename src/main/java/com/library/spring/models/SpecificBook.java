@@ -2,6 +2,7 @@ package com.library.spring.models;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.UniqueElements;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Future;
@@ -25,9 +26,11 @@ public class SpecificBook {
     @Column(name = "DATE_OF_ISSUE")
     @PastOrPresent(message = "date Of Issue must be present")
     @FutureOrPresent(message = "date of Issue must be present")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfIssue;
     @Column(name = "RETURN_DATE")
     @Future(message = "return Date must be in future")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate returnDate;
     @Column(name = "SHELF")
     @NotBlank(message = "shelf can't be blank")
@@ -44,8 +47,8 @@ public class SpecificBook {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "BOOK_ID", nullable = false)
     private Book book;
-    @ManyToMany(mappedBy = "specificBooks", cascade = CascadeType.ALL)
-    private Set<Reader> readers;
+    @OneToMany(mappedBy = "specificBook", cascade = CascadeType.ALL)
+    private Set<SpecificBookReader> specificBookReaders;
     @OneToOne(mappedBy = "specificBook", orphanRemoval = true)
     private Blacklist blacklist;
 
@@ -54,7 +57,8 @@ public class SpecificBook {
     }
 
     public SpecificBook(Long id, String uniqueCode, Boolean inPlace, LocalDate dateOfIssue, LocalDate returnDate,
-                        String shelf, String rank, String room, Book book) {
+                        String shelf, String rank, String room, Book book,Set<SpecificBookReader> specificBookReaders,
+                        Blacklist blacklist) {
         this.id = id;
         this.uniqueCode = uniqueCode;
         this.inPlace = inPlace;
@@ -64,6 +68,8 @@ public class SpecificBook {
         this.rank = rank;
         this.room = room;
         this.book = book;
+        this.specificBookReaders = specificBookReaders;
+        this.blacklist = blacklist;
     }
 
     public Long getId() {
@@ -138,12 +144,12 @@ public class SpecificBook {
         this.room = room;
     }
 
-    public Set<Reader> getReaders() {
-        return readers;
+    public Set<SpecificBookReader> getSpecificBookReaders() {
+        return specificBookReaders;
     }
 
-    public void setReaders(Set<Reader> readers) {
-        this.readers = readers;
+    public void setSpecificBookReaders(Set<SpecificBookReader> specificBookReaders) {
+        this.specificBookReaders = specificBookReaders;
     }
 
     public Blacklist getBlacklist() {

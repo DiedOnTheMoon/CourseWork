@@ -1,31 +1,35 @@
 package com.library.spring.controllers;
 
 import com.library.spring.models.*;
-import com.library.spring.repository.BlacklistRepository;
-import com.library.spring.repository.BookRepository;
-import com.library.spring.repository.SpecificBookRepository;
+import com.library.spring.repository.*;
 import com.library.spring.service.BookService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/book")
 public class BookController {
+    private final SpecificBookReaderRepository specificBookReaderRepository;
+    private final ReaderRepository readerRepository;
     private final SpecificBookRepository specificBookRepository;
     private final BookRepository bookRepository;
     private final BlacklistRepository blacklistRepository;
 
     public BookController(SpecificBookRepository specificBookRepository, BookRepository bookRepository,
-                          BlacklistRepository blacklistRepository) {
+                          BlacklistRepository blacklistRepository, ReaderRepository readerRepository, SpecificBookReaderRepository specificBookReaderRepository) {
         this.specificBookRepository = specificBookRepository;
         this.bookRepository = bookRepository;
         this.blacklistRepository = blacklistRepository;
+        this.readerRepository = readerRepository;
+        this.specificBookReaderRepository = specificBookReaderRepository;
     }
 
     @GetMapping("/add")
@@ -95,15 +99,26 @@ public class BookController {
     @PostMapping("/return/{id}/{readerId}")
     public String returnBook(@PathVariable("id") Long id, @PathVariable("readerId") Long readerId){
 
+        Reader reader = readerRepository.findById(readerId).get();
         SpecificBook book = specificBookRepository.findById(id).get();
 
         book.setReturnDate(null);
         book.setDateOfIssue(null);
         book.setInPlace(true);
 
+        SpecificBookReader specificBookReader = book.getSpecificBookReaders().stream()
+                .filter( b -> !b.getReturn()).findFirst().get();
+        specificBookReader.setReturn(true);
+
         if(book.getBlacklist() != null) {
+            reader.setBehaviorRank(reader.getBehaviorRank() - 1);
             blacklistRepository.delete(book.getBlacklist());
+        }else{
+            reader.setBehaviorRank(reader.getBehaviorRank() + 1);
         }
+
+        specificBookReaderRepository.save(specificBookReader);
+        readerRepository.save(reader);
 
         return "redirect:/reader/" + readerId + "/";
     }

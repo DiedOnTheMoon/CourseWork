@@ -3,12 +3,14 @@ package com.library.spring.Util;
 import com.library.spring.models.Blacklist;
 import com.library.spring.models.Reader;
 import com.library.spring.models.SpecificBook;
+import com.library.spring.models.SpecificBookReader;
 import com.library.spring.repository.ReaderRepository;
 
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
@@ -24,7 +26,12 @@ public class Util {
             blacklists = reader.getBlacklists();
             if (blacklists == null) blacklists = new HashSet<>();
 
-            for(SpecificBook book: reader.getSpecificBooks()){
+            var specBooks = reader.getSpecificBooksReader().stream()
+                    .filter(SpecificBookReader::getReturn)
+                    .map(SpecificBookReader::getSpecificBook)
+                    .collect(Collectors.toSet());
+
+            for(SpecificBook book: specBooks){
                 if (book.getReturnDate().isBefore(LocalDate.now())){
 
                     Long allPrice = Math.round( DAYS.between(today, book.getReturnDate()) *
