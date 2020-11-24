@@ -47,9 +47,9 @@ public class SpecificBook {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "BOOK_ID", nullable = false)
     private Book book;
-    @OneToMany(mappedBy = "specificBook", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "specificBook", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<SpecificBookReader> specificBookReaders;
-    @OneToOne(mappedBy = "specificBook", orphanRemoval = true)
+    @OneToOne(mappedBy = "specificBook", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private Blacklist blacklist;
 
     public SpecificBook() {
@@ -158,5 +158,9 @@ public class SpecificBook {
 
     public void setBlacklist(Blacklist blacklist) {
         this.blacklist = blacklist;
+    }
+
+    public int getSizeSpecificBooksReader(){
+        return specificBookReaders.size();
     }
 }

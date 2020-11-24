@@ -17,7 +17,7 @@ public class Author {
     @NotBlank(message = "please fill Author name!")
     @Length(min=3, max = 255, message = "author name is not correct (max=255, min=3)")
     private String authorName;
-    @OneToMany(mappedBy = "author", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Book> books;
 
     public Author() {

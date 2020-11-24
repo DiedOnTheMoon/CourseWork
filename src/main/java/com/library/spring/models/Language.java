@@ -17,7 +17,7 @@ public class Language {
     @NotBlank(message = "language cannot be blank")
     @Length(min=4, max=255, message = "language length is not correct(min=4, max=255)")
     private String languageName;
-    @OneToMany(mappedBy = "language", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "language", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Book> books;
 
     public Language() {

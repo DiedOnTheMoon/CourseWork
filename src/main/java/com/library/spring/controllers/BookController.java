@@ -178,13 +178,18 @@ public class BookController {
             return "book/edit";
         }
 
-        book.setLanguage(language);
-        book.setGenre(genre);
-        book.setAuthor(author);
-        book.setPublisher(publisher);
-        book.getPublisher().setCity(city);
+        Book book1 = bookRepository.findById(id).get();
 
-        BookService.updateBook(book);
+        book1.setBookName(book.getBookName());
+        book1.setPrice(book.getPrice());
+        book1.setYear(book.getYear());
+        book1.setLanguage(language);
+        book1.setGenre(genre);
+        book1.setAuthor(author);
+        book1.setPublisher(publisher);
+        book1.getPublisher().setCity(city);
+
+        BookService.updateBook(book1);
 
         return "redirect:/book/table/";
     }

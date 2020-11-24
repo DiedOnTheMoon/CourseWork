@@ -20,7 +20,7 @@ public class Publisher {
     @ManyToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "CITY_ID")
     private City city;
-    @OneToMany(mappedBy = "publisher", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "publisher", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Book> books;
 
     public Publisher() {

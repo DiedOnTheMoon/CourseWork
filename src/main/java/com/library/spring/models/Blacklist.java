@@ -15,7 +15,7 @@ public class Blacklist {
     @JoinColumn(name = "READER_ID")
     private Reader reader;
 
-    @OneToOne(fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "SPECIFIC_BOOK_ID", referencedColumnName = "ID")
     private SpecificBook specificBook;
 

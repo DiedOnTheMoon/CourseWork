@@ -38,7 +38,7 @@ public class Book {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name="GENRE_ID", nullable = false)
     private Genre genre;
-    @OneToMany(mappedBy = "book", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<SpecificBook> specificBooks;
 
     public Book() {

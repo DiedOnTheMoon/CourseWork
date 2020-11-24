@@ -39,7 +39,7 @@ public class Reader {
     private String phone;
     @Column(name = "BEHAVIOR_RANK")
     private int behaviorRank;
-    @OneToMany(mappedBy = "reader", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "reader", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Blacklist> blacklists;
     @OneToMany(mappedBy = "reader", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<SpecificBookReader> specificBooksReader;
