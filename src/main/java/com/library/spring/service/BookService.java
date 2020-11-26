@@ -38,10 +38,10 @@ public class BookService {
         specificBook.getBook().getPublisher().setCity(city);
         specificBook.getBook().setAuthor(author);
         specificBook.getBook().setLanguage(language);
+        Book bookExample = specificBook.getBook();
 
-        Book book = bookRepository.findBookByAuthorAuthorNameAndLanguageLanguageNameAndPublisherPublisherNameAndPublisherCityCityNameAndGenreGenreName
-                (author.getAuthorName(), language.getLanguageName(), publisher.getPublisherName(), city.getCityName(),
-                        genre.getGenreName());
+        Book book = bookRepository.findBook(bookExample.getBookName(), bookExample.getPrice(), bookExample.getYear(),
+                language.getLanguageName(), publisher.getPublisherName(), city.getCityName(), genre.getGenreName());
         if(book == null){
             specificBookRepository.save(specificBook);
         }else{

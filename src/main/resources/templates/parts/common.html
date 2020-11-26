@@ -42,23 +42,22 @@
                             <a class="dropdown-item" th:href="@{/reader/add}">Add new Reader</a>
                         </div>
                     </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" th:href="@{/report/genre}">Report <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" th:href="@{/chart/genre}">Chart <span class="sr-only">(current)</span></a>
-                    </li>
-                    <!-- Нужно ли??
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" id="SpecificBooks" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Specific Books
+                        <a class="nav-link dropdown-toggle" id="Report" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Reports
                         </a>
-                        <div class="dropdown-menu" aria-labelledby="Readers">
-                            <a class="dropdown-item" href="#">Table</a>
-                            <a class="dropdown-item" href="#"></a>
+                        <div class="dropdown-menu" aria-labelledby="Report">
+                            <a class="dropdown-item" th:href="@{/report/genre}">Report by popular Genre</a>
                         </div>
                     </li>
-                    -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="Chart" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Charts
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="Chart">
+                            <a class="dropdown-item" th:href="@{/chart/genre}">Chart by popular Genre</a>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </nav>
