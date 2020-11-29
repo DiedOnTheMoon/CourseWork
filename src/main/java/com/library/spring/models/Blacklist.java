@@ -9,28 +9,25 @@ public class Blacklist {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private Long id;
-    @Column(name = "ALL_PRICE")
-    private Long allPrice;
+    @Column(name = "PRICE")
+    private Long price;
+    @Column(name = "ISPAID")
+    private Boolean isPaid;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "READER_ID")
     private Reader reader;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "SPECIFIC_BOOK_ID", referencedColumnName = "ID")
     private SpecificBook specificBook;
 
     public Blacklist() {
     }
 
-    public Blacklist(Long id, Long allPrice, Reader reader, SpecificBook specificBook) {
+    public Blacklist(Long id, Long price, Boolean isPaid, Reader reader, SpecificBook specificBook) {
         this.id = id;
-        this.allPrice = allPrice;
-        this.reader = reader;
-        this.specificBook = specificBook;
-    }
-
-    public Blacklist(Long allPrice, Reader reader, SpecificBook specificBook){
-        this.allPrice = allPrice;
+        this.price = price;
+        this.isPaid = isPaid;
         this.reader = reader;
         this.specificBook = specificBook;
     }
@@ -43,12 +40,12 @@ public class Blacklist {
         this.id = id;
     }
 
-    public Long getAllPrice() {
-        return allPrice;
+    public Long getPrice() {
+        return price;
     }
 
-    public void setAllPrice(Long allPrice) {
-        this.allPrice = allPrice;
+    public void setPrice(Long price) {
+        this.price = price;
     }
 
     public Reader getReader() {
@@ -67,7 +64,15 @@ public class Blacklist {
         this.specificBook = specificBook;
     }
 
+    public Boolean getPaid() {
+        return isPaid;
+    }
+
+    public void setPaid(Boolean paid) {
+        isPaid = paid;
+    }
+
     public String normalRepresentation(){
-        return String.format("%d.%2d", allPrice / 100, allPrice % 100);
+        return String.format("%d.%2d", price / 100, price % 100);
     }
 }

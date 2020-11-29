@@ -4,9 +4,14 @@ import com.library.spring.models.*;
 import com.library.spring.repository.*;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 @Service
 public class BookService {
+    private static  BlacklistRepository blacklistRepository;
+    private static  ReaderRepository readerRepository;
     private static  BookRepository bookRepository;
+    private static  SpecificBookReaderRepository specificBookReaderRepository;
     private static  SpecificBookRepository specificBookRepository;
     private static  CityRepository cityRepository;
     private static  AuthorRepository authorRepository;
@@ -16,7 +21,9 @@ public class BookService {
 
     public BookService(BookRepository bookRepository, SpecificBookRepository specificBookRepository,
                        CityRepository cityRepository, AuthorRepository authorRepository, GenreRepository genreRepository,
-                       PublisherRepository publisherRepository, LanguageRepository languageRepository) {
+                       PublisherRepository publisherRepository, LanguageRepository languageRepository,
+                       ReaderRepository readerRepository, BlacklistRepository blacklistRepository,
+                       SpecificBookReaderRepository specificBookReaderRepository) {
         BookService.bookRepository = bookRepository;
         BookService.specificBookRepository = specificBookRepository;
         BookService.cityRepository = cityRepository;
@@ -24,6 +31,9 @@ public class BookService {
         BookService.genreRepository = genreRepository;
         BookService.publisherRepository = publisherRepository;
         BookService.languageRepository = languageRepository;
+        BookService.readerRepository = readerRepository;
+        BookService.blacklistRepository = blacklistRepository;
+        BookService.specificBookReaderRepository = specificBookReaderRepository;
     }
 
     public static void addNewBook(SpecificBook specificBook){
@@ -65,6 +75,37 @@ public class BookService {
         book.getPublisher().setCity(city);
 
         bookRepository.save(book);
+    }
+
+    public static void returnBook(Long id, Long readerId){
+        Reader reader = readerRepository.findById(readerId).get();
+        SpecificBook book = specificBookRepository.findById(id).get();
+
+        SpecificBookReader spr = book.getSpecificBookReaders().stream()
+                .filter(s -> !s.getReturn()).findFirst().get();
+
+        spr.setReturn(true);
+        spr.setRealReturnDate(LocalDate.now());
+        book.setInPlace(true);
+
+        SpecificBookReader specificBookReader = book.getSpecificBookReaders().stream()
+                .filter( b -> !b.getReturn()).findFirst().get();
+        specificBookReader.setReturn(true);
+        specificBookReader.setRealReturnDate(LocalDate.now());
+
+        Blacklist bl = book.getBlacklists().stream()
+                .filter( b -> !b.getPaid()).findFirst().orElse(null);
+
+        if(bl != null) {
+            reader.setBehaviorRank(reader.getBehaviorRank() - 1);
+            bl.setPaid(true);
+            blacklistRepository.save(bl);
+        }else{
+            reader.setBehaviorRank(reader.getBehaviorRank() + 1);
+        }
+
+        specificBookReaderRepository.save(specificBookReader);
+        readerRepository.save(reader);
     }
 
     private static Genre findGenre(Genre genre){

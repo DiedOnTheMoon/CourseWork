@@ -167,7 +167,7 @@ public class ReaderController {
             @ModelAttribute("id") @PathVariable("id") Long id,
             Model model){
         model.addAttribute("readers", readerRepository.findAll());
-        model.addAttribute("specificBook", new SpecificBook());
+        model.addAttribute("specificBookReader", new SpecificBookReader());
         return "reader/take";
     }
 
@@ -175,19 +175,17 @@ public class ReaderController {
     public String postTake(
             @ModelAttribute("id") @PathVariable("id") Long id,
             @PathVariable("readerId") Long readerId,
-            @ModelAttribute("specificBook") SpecificBook specificBook,
-            BindingResult bindingResult
+            @ModelAttribute("specificBookReader") @Valid SpecificBookReader specificBookReader,
+            BindingResult sbrBinding
     ){
-        if(bindingResult.hasErrors() || specificBook.getDateOfIssue() == null){
+        if(sbrBinding.hasErrors()){
             return "redirect:/reader/take/" + id + "/";
         }
 
         SpecificBook specificBookFromDB = specificBookRepository.findById(id).get();
         Reader reader = readerRepository.findById(readerId).get();
-        specificBookFromDB.setDateOfIssue(specificBook.getDateOfIssue());
-        specificBookFromDB.setReturnDate(specificBook.getReturnDate());
+        specificBookFromDB.getSpecificBookReaders().add(specificBookReader);
         specificBookFromDB.setInPlace(false);
-        SpecificBookReader specificBookReader = new SpecificBookReader();
         specificBookReader.setReturn(false);
         specificBookReader.setReader(reader);
         specificBookReader.setSpecificBook(specificBookFromDB);

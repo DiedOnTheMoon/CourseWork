@@ -43,12 +43,12 @@
         <form th:method="POST" th:action="@{/reader/take/{id}/{readerId} (id=${id}, readerId=${reader.id})}">
             <div class="form-group col-md-1">
                 <td>
-                    <input type="date" name="dateOfIssue" th:field="${specificBook.dateOfIssue}">
-                    <div style="color: red" th:if="${#fields.hasErrors('specificBook.dateOfIssue')}" th:errors="${specificBook.dateOfIssue}">Date error</div>
+                    <input type="date" name="dateOfIssue" th:field="${specificBookReader.dateOfIssue}">
+                    <div style="color: red" th:if="${#fields.hasErrors('specificBookReader.dateOfIssue')}" th:errors="${specificBookReader.dateOfIssue}">Date error</div>
                 </td>
                 <td>
-                    <input type="date" name="returnDate" th:field="${specificBook.returnDate}">
-                    <div style="color: red" th:if="${#fields.hasErrors('specificBook.returnDate')}" th:errors="${specificBook.dateOfIssue}">Date error</div>
+                    <input type="date" name="returnDate" th:field="${specificBookReader.returnDate}">
+                    <div style="color: red" th:if="${#fields.hasErrors('specificBookReader.returnDate')}" th:errors="${specificBookReader.dateOfIssue}">Date error</div>
                 </td>
             </div>
             <td>

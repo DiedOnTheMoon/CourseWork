@@ -34,8 +34,6 @@
         <tr th:each="book : ${books}">
             <td th:text="${book.uniqueCode}"></td>
             <td th:text="${book.inPlace} ? 'in place' : 'on hands'"></td>
-            <td th:text="${book.dateOfIssue} ?: 'blank'"></td>
-            <td th:text="${book.returnDate} ?: 'blank'"></td>
             <td th:text="${book.shelf}"></td>
             <td th:text="${book.rank}"></td>
             <td th:text="${book.room}"></td>

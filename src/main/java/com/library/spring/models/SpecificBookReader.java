@@ -1,6 +1,12 @@
 package com.library.spring.models;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.PastOrPresent;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "SPECIFIC_BOOK_READER")
@@ -13,6 +19,21 @@ public class SpecificBookReader {
     @Column(name="IS_RETURN")
     private Boolean isReturn;
 
+    @Column(name = "DATE_OF_ISSUE")
+    @PastOrPresent(message = "date Of Issue must be present")
+    @FutureOrPresent(message = "date of Issue must be present")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dateOfIssue;
+
+    @Column(name = "RETURN_DATE")
+    @Future(message = "return Date must be in future")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate returnDate;
+
+    @Column(name = "REAL_RETURN_DATE")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate realReturnDate;
+
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "READER_ID", nullable = false)
     private Reader reader;
@@ -24,9 +45,14 @@ public class SpecificBookReader {
     public SpecificBookReader() {
     }
 
-    public SpecificBookReader(Long id, Boolean isReturn, Reader reader, SpecificBook specificBook) {
+    public SpecificBookReader(Long id, Boolean isReturn, LocalDate dateOfIssue,
+                              LocalDate returnDate, LocalDate realReturnDate, Reader reader,
+                              SpecificBook specificBook) {
         this.id = id;
         this.isReturn = isReturn;
+        this.dateOfIssue = dateOfIssue;
+        this.returnDate = returnDate;
+        this.realReturnDate = realReturnDate;
         this.reader = reader;
         this.specificBook = specificBook;
     }
@@ -61,5 +87,29 @@ public class SpecificBookReader {
 
     public void setSpecificBook(SpecificBook specificBook) {
         this.specificBook = specificBook;
+    }
+
+    public LocalDate getDateOfIssue() {
+        return dateOfIssue;
+    }
+
+    public void setDateOfIssue(LocalDate dateOfIssue) {
+        this.dateOfIssue = dateOfIssue;
+    }
+
+    public LocalDate getReturnDate() {
+        return returnDate;
+    }
+
+    public void setReturnDate(LocalDate returnDate) {
+        this.returnDate = returnDate;
+    }
+
+    public LocalDate getRealReturnDate() {
+        return realReturnDate;
+    }
+
+    public void setRealReturnDate(LocalDate realReturnDate) {
+        this.realReturnDate = realReturnDate;
     }
 }

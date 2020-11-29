@@ -19,7 +19,6 @@ public class Util {
     public static void updateBlackList(ReaderRepository readerRepository){
 
         List<Reader> readers = readerRepository.findAll();
-        LocalDate today = LocalDate.now();
         Set<Blacklist> blacklists;
 
         for(Reader reader: readers){
@@ -32,19 +31,31 @@ public class Util {
                     .collect(Collectors.toSet());
 
             for(SpecificBook book: specBooks){
-                if (book.getReturnDate().isBefore(LocalDate.now())){
+                for(SpecificBookReader sbr : book.getSpecificBookReaders())
+                {
+                    if(sbr.getReturn()){
+                        continue;
+                    }
 
-                    Long allPrice = Math.round( DAYS.between(today, book.getReturnDate()) *
-                            (double) book.getBook().getPrice() / 10000);
+                    Blacklist bl = new Blacklist();
 
-                    blacklists.add(new Blacklist(allPrice, reader, book ));
+                    if(sbr.getReturnDate().isBefore(LocalDate.now())){
+
+                        Long price = Math.round( DAYS.between(LocalDate.now(), sbr.getReturnDate()) *
+                                (double) book.getBook().getPrice() / 10000);
+
+                        bl.setPrice(price);
+                        bl.setPaid(false);
+                        bl.setSpecificBook(book);
+                        bl.setReader(sbr.getReader());
+
+                        blacklists.add(bl);
+                    }
                 }
             }
 
             if(blacklists.size() != 0) reader.setBlacklists(blacklists);
         }
-
         readerRepository.saveAll(readers);
     }
-
 }

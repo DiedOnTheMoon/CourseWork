@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -99,26 +100,7 @@ public class BookController {
     @PostMapping("/return/{id}/{readerId}")
     public String returnBook(@PathVariable("id") Long id, @PathVariable("readerId") Long readerId){
 
-        Reader reader = readerRepository.findById(readerId).get();
-        SpecificBook book = specificBookRepository.findById(id).get();
-
-        book.setReturnDate(null);
-        book.setDateOfIssue(null);
-        book.setInPlace(true);
-
-        SpecificBookReader specificBookReader = book.getSpecificBookReaders().stream()
-                .filter( b -> !b.getReturn()).findFirst().get();
-        specificBookReader.setReturn(true);
-
-        if(book.getBlacklist() != null) {
-            reader.setBehaviorRank(reader.getBehaviorRank() - 1);
-            blacklistRepository.delete(book.getBlacklist());
-        }else{
-            reader.setBehaviorRank(reader.getBehaviorRank() + 1);
-        }
-
-        specificBookReaderRepository.save(specificBookReader);
-        readerRepository.save(reader);
+        BookService.returnBook(id, readerId);
 
         return "redirect:/reader/" + readerId + "/";
     }

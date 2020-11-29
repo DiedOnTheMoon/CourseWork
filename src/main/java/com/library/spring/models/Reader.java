@@ -9,6 +9,7 @@ import javax.validation.constraints.Past;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "READER")
@@ -131,5 +132,9 @@ public class Reader {
 
     public void setSpecificBooksReader(Set<SpecificBookReader> specificBooksReader) {
         this.specificBooksReader = specificBooksReader;
+    }
+
+    public int getSizeBlacklist(){
+        return blacklists.stream().filter( b -> !b.getPaid()).collect(Collectors.toSet()).size();
     }
 }

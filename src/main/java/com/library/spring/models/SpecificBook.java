@@ -1,16 +1,11 @@
 package com.library.spring.models;
 
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.UniqueElements;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.Future;
-import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.PastOrPresent;
-import java.util.Set;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Table(name = "SPECIFIC_BOOK", uniqueConstraints = @UniqueConstraint(columnNames = {"SHELF", "RANK", "ROOM"}))
@@ -23,15 +18,6 @@ public class SpecificBook {
     private String uniqueCode;
     @Column(name = "IN_PLACE")
     private Boolean inPlace;
-    @Column(name = "DATE_OF_ISSUE")
-    @PastOrPresent(message = "date Of Issue must be present")
-    @FutureOrPresent(message = "date of Issue must be present")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate dateOfIssue;
-    @Column(name = "RETURN_DATE")
-    @Future(message = "return Date must be in future")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate returnDate;
     @Column(name = "SHELF")
     @NotBlank(message = "shelf can't be blank")
     @Length(min=3, max=255, message = "shelf length should be >=3 and <= 255")
@@ -49,27 +35,25 @@ public class SpecificBook {
     private Book book;
     @OneToMany(mappedBy = "specificBook", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<SpecificBookReader> specificBookReaders;
-    @OneToOne(mappedBy = "specificBook", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    private Blacklist blacklist;
+    @OneToMany(mappedBy = "specificBook", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    private Set<Blacklist> blacklists;
 
     public SpecificBook() {
 
     }
 
-    public SpecificBook(Long id, String uniqueCode, Boolean inPlace, LocalDate dateOfIssue, LocalDate returnDate,
+    public SpecificBook(Long id, String uniqueCode, Boolean inPlace,
                         String shelf, String rank, String room, Book book,Set<SpecificBookReader> specificBookReaders,
-                        Blacklist blacklist) {
+                        Set<Blacklist> blacklist) {
         this.id = id;
         this.uniqueCode = uniqueCode;
         this.inPlace = inPlace;
-        this.dateOfIssue = dateOfIssue;
-        this.returnDate = returnDate;
         this.shelf = shelf;
         this.rank = rank;
         this.room = room;
         this.book = book;
         this.specificBookReaders = specificBookReaders;
-        this.blacklist = blacklist;
+        this.blacklists = blacklist;
     }
 
     public Long getId() {
@@ -86,22 +70,6 @@ public class SpecificBook {
 
     public void setUniqueCode(String uniqueCode) {
         this.uniqueCode = uniqueCode;
-    }
-
-    public LocalDate getDateOfIssue() {
-        return dateOfIssue;
-    }
-
-    public void setDateOfIssue(LocalDate dateOfIssue) {
-        this.dateOfIssue = dateOfIssue;
-    }
-
-    public LocalDate getReturnDate() {
-        return returnDate;
-    }
-
-    public void setReturnDate(LocalDate returnDate) {
-        this.returnDate = returnDate;
     }
 
     public Book getBook() {
@@ -152,15 +120,19 @@ public class SpecificBook {
         this.specificBookReaders = specificBookReaders;
     }
 
-    public Blacklist getBlacklist() {
-        return blacklist;
+    public Set<Blacklist> getBlacklists() {
+        return blacklists;
     }
 
-    public void setBlacklist(Blacklist blacklist) {
-        this.blacklist = blacklist;
+    public void setBlacklists(Set<Blacklist> blacklists) {
+        this.blacklists = blacklists;
     }
 
     public int getSizeSpecificBooksReader(){
         return specificBookReaders.size();
+    }
+
+    public LocalDate getReturnDate(){
+        return specificBookReaders.stream().filter( b -> !b.getReturn()).findFirst().get().getReturnDate();
     }
 }

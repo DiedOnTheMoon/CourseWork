@@ -81,38 +81,40 @@
         </tr>
         </tbody>
     </table>
-    <label> Indebtedness </label>
-    <form method="POST" th:action="@{/reader/filter/blacklistFilter}">
-        <div class="form-group col-md-1 pt-3">
-            <label>Search
-                <input type="text" name="blacklistFilter">
-            </label>
-        </div>
-        <div>
-            <input class="btn btn-dark" type="submit" value="Search" >
-        </div>
-    </form>
-    <table class="table table-striped table-bordered">
-        <thead class="table-dark">
-        <tr>
-            <th scope="col"> Title</th>
-            <th scope="col"> Return Date</th>
-            <th scope="col"> Price</th>
-            <th scope="col"> Return Book</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="book : ${owed}">
-            <td th:text="${book.specificBook.book.bookName}"></td>
-            <td th:text="${book.specificBook.returnDate}"></td>
-            <td th:text="${book.normalRepresentation()}"></td>
-            <td>
-                <form th:method="POST" th:action="@{/book/return/{id}/{readerId}(readerId=${reader.id}, id=${book.id})}">
-                    <input type="submit" value="return">
-                </form>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <div th:if="${reader.getSizeBlacklist() == 0}">
+        <label> Indebtedness </label>
+        <form method="POST" th:action="@{/reader/filter/blacklistFilter}">
+            <div class="form-group col-md-1 pt-3">
+                <label>Search
+                    <input type="text" name="blacklistFilter">
+                </label>
+            </div>
+            <div>
+                <input class="btn btn-dark" type="submit" value="Search" >
+            </div>
+        </form>
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+            <tr>
+                <th scope="col"> Title</th>
+                <th scope="col"> Return Date</th>
+                <th scope="col"> Price</th>
+                <th scope="col"> Return Book</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="book : ${owed}">
+                <td th:text="${book.specificBook.book.bookName}"></td>
+                <td th:text="${book.specificBook.getReturnDate()}"></td>
+                <td th:text="${book.normalRepresentation()}"></td>
+                <td>
+                    <form th:method="POST" th:action="@{/book/return/{id}/{readerId}(readerId=${reader.id}, id=${book.id})}">
+                        <input type="submit" value="return">
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
