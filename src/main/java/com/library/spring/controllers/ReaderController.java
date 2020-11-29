@@ -6,6 +6,7 @@ import com.library.spring.models.SpecificBook;
 import com.library.spring.models.SpecificBookReader;
 import com.library.spring.repository.ReaderRepository;
 import com.library.spring.repository.SpecificBookRepository;
+import com.library.spring.service.BlacklistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -68,6 +69,7 @@ public class ReaderController {
     public String reader(@PathVariable("id") Long id, Model model){
 
         Reader reader = readerRepository.findById(id).get();
+        BlacklistService.updateBlackList(readerRepository);
 
         model.addAttribute("reader", reader);
         model.addAttribute("books", reader.getSpecificBooksReader().stream()
