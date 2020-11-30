@@ -28,13 +28,14 @@ public class ChartController {
     @GetMapping("/genre")
     public ResponseEntity<StreamingResponseBody> chartByGenre(){
 
-        XSSFWorkbook workbook = ReportService.createReport("Genre Pie Chart");
+        XSSFWorkbook workbook = ReportService.createReportByGenre("Genre Report");
 
         var list  = ReportService.createSortedGenreList();
 
-        XSSFSheet sheet = workbook.getSheet("Genre Pie Chart");
+        XSSFSheet sheet = workbook.getSheet("Genre Report");
+        XSSFSheet sheet1 = workbook.createSheet("Genre Chart Pie");
 
-        XSSFDrawing drawing = sheet.createDrawingPatriarch();
+        XSSFDrawing drawing = sheet1.createDrawingPatriarch();
         XSSFClientAnchor anchor = drawing.createAnchor(0, 0, 0, 0, 0, 4, 7, 20);
 
 
