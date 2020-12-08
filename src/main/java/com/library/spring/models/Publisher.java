@@ -4,6 +4,8 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.Set;
 
 @Entity
@@ -14,7 +16,9 @@ public class Publisher {
     @Column(name = "ID")
     private Long id;
     @Column(name = "NAME")
+    @NotNull(message = "should not be null")
     @NotBlank(message = "publisher cannot be blank")
+    @Pattern(regexp = "^[A-Z][a-z]{2,254}", message = "Name is not correct. Example: Publ")
     @Length(min=3, max=255, message = "publisher length isn't correct (min=3, max=255)")
     private String publisherName;
     @ManyToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL)

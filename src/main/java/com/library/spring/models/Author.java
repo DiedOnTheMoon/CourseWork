@@ -4,6 +4,8 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.Set;
 
 @Entity
@@ -15,6 +17,8 @@ public class Author {
     private Long id;
     @Column(name = "NAME")
     @NotBlank(message = "please fill Author name!")
+    @NotNull(message = "AuthorName should be not null")
+    @Pattern(regexp = "^[A-Z][a-z]{2,255}", message = "Author name is not correct. Example: Author")
     @Length(min=3, max = 255, message = "author name is not correct (max=255, min=3)")
     private String authorName;
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.EAGER)

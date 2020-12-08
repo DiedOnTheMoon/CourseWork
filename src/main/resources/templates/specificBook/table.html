@@ -7,8 +7,8 @@
 </head>
 <body>
     <div th:include="parts/common.html :: navigation"></div>
-    <form method="post" th:action="@{specificBook/{id}(id=${id})/filter/table}">
-        <div class="form-group col-md-1 pt-5">
+    <form class="pt-5 pb-5" method="post" th:action="@{/specificBook/{id}/filter/ (id=${id})}">
+        <div>
             <label> Search
                 <input type="text" name="filter">
                 <input class="btn btn-dark" type="submit" value="Search">
@@ -20,8 +20,6 @@
         <tr>
             <th scope="col"> Unique code </th>
             <th scope="col"> In place </th>
-            <th scope="col"> Date of issue</th>
-            <th scope="col"> Return date </th>
             <th scope="col"> Shelf</th>
             <th scope="col"> Rank </th>
             <th scope="col"> Room </th>

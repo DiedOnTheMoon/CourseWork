@@ -75,7 +75,7 @@ public class SpecificBookController {
         bookRepository.save(book);
 
 
-        return "redirect:book/" + id;
+        return "redirect:/book/" + id;
     }
 
     @PostMapping("/{id}/filter")

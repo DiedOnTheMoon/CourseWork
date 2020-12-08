@@ -3,6 +3,7 @@ package com.library.spring.controllers;
 import com.library.spring.repository.GenreRepository;
 import com.library.spring.repository.SpecificBookRepository;
 import com.library.spring.service.ReportService;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xddf.usermodel.chart.*;
 import org.apache.poi.xssf.usermodel.*;
@@ -35,6 +36,7 @@ public class ChartController {
         XSSFSheet sheet = workbook.getSheet("Genre Report");
         XSSFSheet sheet1 = workbook.createSheet("Genre Chart Pie");
 
+
         XSSFDrawing drawing = sheet1.createDrawingPatriarch();
         XSSFClientAnchor anchor = drawing.createAnchor(0, 0, 0, 0, 0, 4, 7, 20);
 
@@ -47,17 +49,18 @@ public class ChartController {
         legend.setPosition(LegendPosition.TOP_RIGHT);
 
         XDDFDataSource<String> genres = XDDFDataSourcesFactory.fromStringCellRange(sheet,
-                new CellRangeAddress(0, list.size()-1, 0, 0));
+                new CellRangeAddress(1, list.size(), 0, 0));
 
         XDDFNumericalDataSource<Double> values = XDDFDataSourcesFactory.fromNumericCellRange(sheet,
-                new CellRangeAddress(0, list.size() - 1, 1, 1));
+                new CellRangeAddress(1, list.size(), 1, 1));
 
-        //XDDFChartData data = ; new XDDFPieChartData(chart.getCTChart().getPlotArea().addNewPieChart())
-        XDDFChartData data = chart.createData(ChartTypes.PIE, null, null);;
+        XDDFChartData data = chart.createData(ChartTypes.PIE, null, null);
+
         data.setVaryColors(true);
 
         XDDFChartData.Series series = data.addSeries(genres, values);
         series.setTitle("Series", null);
+
         chart.plot(data);
 
         return ResponseEntity

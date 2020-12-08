@@ -7,7 +7,7 @@
 </head>
 <body>
 <div th:include="parts/common.html :: navigation"></div>
-<form method="post" th:action="@{reader/filter/table}">
+<form method="post" th:action="@{/reader/filter/table/}">
     <div class="form-group col-md-1 pt-5">
         <label> Search
             <input type="text" name="filter">
@@ -40,7 +40,7 @@
         <td th:text="${reader.phone}"></td>
         <td th:text="${reader.behaviorRank}"></td>
         <td th:text="${reader.blacklists.size()}"></td>
-        <form th:method="POST" th:action="@{/reader/take/{id}/{readerId} (id=${id}, readerId=${reader.id})}">
+        <form th:method="PUT" th:action="@{/reader/take/{id}/{readerId} (id=${id}, readerId=${reader.id})}">
             <div class="form-group col-md-1">
                 <td>
                     <input type="date" name="dateOfIssue" th:field="${specificBookReader.dateOfIssue}">
@@ -48,7 +48,7 @@
                 </td>
                 <td>
                     <input type="date" name="returnDate" th:field="${specificBookReader.returnDate}">
-                    <div style="color: red" th:if="${#fields.hasErrors('specificBookReader.returnDate')}" th:errors="${specificBookReader.dateOfIssue}">Date error</div>
+                    <div style="color: red" th:if="${#fields.hasErrors('specificBookReader.returnDate')}" th:errors="${specificBookReader.returnDate}">Date error</div>
                 </td>
             </div>
             <td>

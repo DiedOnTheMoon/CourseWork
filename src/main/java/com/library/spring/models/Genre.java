@@ -4,6 +4,8 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,6 +17,8 @@ public class Genre {
     @Column(name = "ID")
     private Long id;
     @Column(name = "NAME")
+    @NotNull(message = "name should not be null")
+    @Pattern(regexp = "^[A-Z][a-z]{3,254}", message = "Name is not correct. Example: Genre")
     @NotBlank(message = "genre cannot be blank")
     @Length(min=4, max=255, message = "genres length is not correct (min=4, max=255)")
     private String genreName;

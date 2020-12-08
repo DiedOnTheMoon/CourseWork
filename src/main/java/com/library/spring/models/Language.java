@@ -4,6 +4,8 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.Set;
 
 @Entity
@@ -14,7 +16,9 @@ public class Language {
     @Column(name = "ID")
     private Long id;
     @Column(name = "NAME")
+    @NotNull(message = "name should not be blank")
     @NotBlank(message = "language cannot be blank")
+    @Pattern(regexp = "^[A-Z][a-z]{3,254}", message = "Name is not correct. Example: Lang")
     @Length(min=4, max=255, message = "language length is not correct(min=4, max=255)")
     private String languageName;
     @OneToMany(mappedBy = "language", cascade = CascadeType.ALL, fetch = FetchType.EAGER)

@@ -5,6 +5,8 @@ import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Set;
@@ -17,14 +19,17 @@ public class Book {
     @Column(name = "ID")
     private Long id;
     @Column(name = "NAME")
+    @NotNull(message = "book name should not be null")
     @NotBlank(message = "please fill Book name!")
     @Length(min=1, max=255, message = "name is not correct(min=1, max=255)")
     private String bookName;
     @Column(name = "YEAR")
+    @NotNull(message = "price should not be null")
     @Range(min=1900, max=2020, message = "year is not correct (min = 1900, max = 2020)")
     private Integer year;
     @Column(name = "PRICE")
-    @Range(min=1000, max=10000, message="price is not correct (min=10.00  max = 100.00)")
+    @NotNull(message = "price should not be null")
+    @Range(min=1000, max=10000, message="price is not correct (min=1000  max = 10000)")
     private Integer price;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "LANGUAGE_ID", nullable = false)

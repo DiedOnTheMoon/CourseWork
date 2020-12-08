@@ -7,7 +7,7 @@
 </head>
     <body>
     <div th:include="parts/common.html :: navigation" ></div>
-    <form th:method="post" th:action="@{/reader/edit/{id}(id=${reader.id})}" th:object="${reader}">
+    <form th:method="PUT" th:action="@{/reader/edit/{id}(id=${reader.id})}" th:object="${reader}">
         <div class="form-group col-md-1 pt-5">
             <label>First name:
                 <input type="text" name="firstName" th:field="${reader.firstName}">

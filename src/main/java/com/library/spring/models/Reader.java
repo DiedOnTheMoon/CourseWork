@@ -5,6 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import java.time.LocalDate;
 import java.util.Date;
@@ -19,10 +20,12 @@ public class Reader {
     @Column(name = "ID")
     private Long id;
     @Column(name = "FIRST_NAME")
+    @NotNull(message = "First Name should not be null")
     @NotBlank(message = "First name cannot be blank")
     @Length(min=3, max=255, message = "First name length isn't correct (min=3, max=255)")
     private String firstName;
     @Column(name = "LAST_NAME")
+    @NotNull(message = "Last Name should not be null")
     @NotBlank(message = "Last name cannot be blank")
     @Length(min=3, max=255, message = "Last name length isn't correct (min=3, max=255)")
     private String lastName;
@@ -136,5 +139,9 @@ public class Reader {
 
     public int getSizeBlacklist(){
         return blacklists.stream().filter( b -> !b.getPaid()).collect(Collectors.toSet()).size();
+    }
+
+    public int getSizeBooks(){
+        return specificBooksReader.stream().filter(b -> !b.getReturn()).collect(Collectors.toSet()).size();
     }
 }

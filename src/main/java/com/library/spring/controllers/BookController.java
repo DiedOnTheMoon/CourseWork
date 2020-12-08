@@ -105,6 +105,13 @@ public class BookController {
         return "redirect:/reader/" + readerId + "/";
     }
 
+    @DeleteMapping("/delete/{id}/{readerId}")
+    public  String lostBoook(@PathVariable("id") Long id, @PathVariable("readerId") Long readerId){
+
+        BookService.deleteBook(id, readerId);
+        return "redirect:/reader/" + readerId + "/";
+    }
+
     @PostMapping("/filter")
     public String filter(@RequestParam(defaultValue = "") String filter, Model model){
         model.addAttribute("books", bookRepository.findAll().stream()

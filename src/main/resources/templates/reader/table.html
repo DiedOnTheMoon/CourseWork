@@ -7,8 +7,8 @@
 </head>
 <body>
     <div th:include="parts/common.html :: navigation"></div>
-    <form method="post" th:action="@{reader/filter/table}">
-        <div class="form-group col-md-1 pt-5">
+    <form class="pt-5 pb-5" method="post" th:action="@{/reader/filter/table/}">
+        <div>
             <label> Search
                 <input type="text" name="filter">
                 <input class="btn btn-dark" type="submit" value="Search">
@@ -24,6 +24,7 @@
             <th scope="col"> Phone </th>
             <th scope="col"> Behavior rank </th>
             <th scope="col"> Number of books owed </th>
+            <th scope="col"> Edit</th>
             <th scope="col"> Detail view </th>
         </thead>
         <tbody>
@@ -35,6 +36,7 @@
                 <td th:text="${reader.phone}"></td>
                 <td th:text="${reader.behaviorRank}"></td>
                 <td th:text="${reader.blacklists.size()}"></td>
+                <td><a th:href="@{/reader/edit/{id}(id=${reader.id})}">edit</a></td>
                 <td><a th:href="@{/reader/{id}(id=${reader.id})}">view</a></td>
             </tr>
         </tbody>

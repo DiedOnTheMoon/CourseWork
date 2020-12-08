@@ -44,7 +44,7 @@ public class BlacklistService {
                     if(sbr.getReturnDate().isBefore(LocalDate.now())){
 
                         Long price = Math.round( DAYS.between(LocalDate.now(), sbr.getReturnDate()) *
-                                (double) book.getBook().getPrice() / 10000);
+                                (double) book.getBook().getPrice()/ 10000);
 
                         bl.setPrice(price);
                         bl.setPaid(false);

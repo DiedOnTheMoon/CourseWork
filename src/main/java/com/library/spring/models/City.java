@@ -4,6 +4,8 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.Set;
 
 @Entity
@@ -14,6 +16,8 @@ public class City {
     @Column(name = "ID")
     private Long id;
     @Column(name = "NAME")
+    @NotNull(message = "city name should not be null")
+    @Pattern(regexp = "^[A-Z][a-z]{2,254}", message = "Name is not correct. Example: City")
     @NotBlank(message = "city should not be blank")
     @Length(min=3, max=255, message = "city name is not correct (min=3, max=255)")
     private String cityName;

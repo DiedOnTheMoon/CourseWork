@@ -88,11 +88,6 @@ public class BookService {
         spr.setRealReturnDate(LocalDate.now());
         book.setInPlace(true);
 
-        SpecificBookReader specificBookReader = book.getSpecificBookReaders().stream()
-                .filter( b -> !b.getReturn()).findFirst().get();
-        specificBookReader.setReturn(true);
-        specificBookReader.setRealReturnDate(LocalDate.now());
-
         Blacklist bl = book.getBlacklists().stream()
                 .filter( b -> !b.getPaid()).findFirst().orElse(null);
 
@@ -104,8 +99,16 @@ public class BookService {
             reader.setBehaviorRank(reader.getBehaviorRank() + 1);
         }
 
-        specificBookReaderRepository.save(specificBookReader);
+        specificBookReaderRepository.save(spr);
         readerRepository.save(reader);
+    }
+
+    public static void deleteBook(Long id, Long readerId){
+        Reader r = readerRepository.findById(readerId).get();
+        r.setBehaviorRank(r.getBehaviorRank() - 5);
+
+        specificBookRepository.deleteById(id);
+        readerRepository.save(r);
     }
 
     private static Genre findGenre(Genre genre){

@@ -5,6 +5,7 @@ import com.library.spring.models.Reader;
 import com.library.spring.models.SpecificBook;
 import com.library.spring.models.SpecificBookReader;
 import com.library.spring.repository.ReaderRepository;
+import com.library.spring.repository.SpecificBookReaderRepository;
 import com.library.spring.repository.SpecificBookRepository;
 import com.library.spring.service.BlacklistService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +23,15 @@ import java.util.stream.Collectors;
 public class ReaderController {
     private String blacklistFilter;
     private String bookFilter;
+    private final SpecificBookReaderRepository specificBookReaderRepository;
     private final SpecificBookRepository specificBookRepository;
     private final ReaderRepository readerRepository;
 
-    public ReaderController(ReaderRepository readerRepository, SpecificBookRepository specificBookRepository) {
+    public ReaderController(ReaderRepository readerRepository, SpecificBookRepository specificBookRepository,
+                            SpecificBookReaderRepository specificBookReaderRepository) {
         this.readerRepository = readerRepository;
         this.specificBookRepository = specificBookRepository;
+        this.specificBookReaderRepository = specificBookReaderRepository;
     }
 
     @GetMapping("/add")
@@ -47,7 +51,7 @@ public class ReaderController {
         reader.setBehaviorRank(0);
         readerRepository.save(reader);
 
-        return "redirect:reader/table/";
+        return "redirect:/reader/table/";
     }
 
     @GetMapping("/table")
@@ -61,7 +65,8 @@ public class ReaderController {
     @PostMapping("/filter/table")
     public String tableFilter(@RequestParam(defaultValue = "") String filter, Model model){
         model.addAttribute("readers", readerRepository.findAll().stream()
-                .filter(r -> r.getLastName().startsWith(filter)));
+                .filter(r -> r.getLastName().startsWith(filter))
+                .collect(Collectors.toSet()));
         return "reader/table";
     }
 
@@ -164,6 +169,27 @@ public class ReaderController {
         return "reader/edit";
     }
 
+    @PutMapping("/edit/{id}")
+    public  String saveEdit(
+            @PathVariable("id") Long id,
+            @ModelAttribute("reader") Reader reader,
+            BindingResult bindingResult)
+    {
+        if(bindingResult.hasErrors()){
+            return "reader/edit";
+        }
+        Reader r = readerRepository.findById(id).get();
+        r.setAddress(reader.getAddress());
+        r.setPhone(reader.getPhone());
+        r.setDateOfBirth(reader.getDateOfBirth());
+        r.setLastName(reader.getLastName());
+        r.setFirstName(reader.getFirstName());
+        readerRepository.save(r);
+
+        return "redirect:/reader/table/";
+    }
+
+
     @GetMapping("/take/{id}")
     public String take(
             @ModelAttribute("id") @PathVariable("id") Long id,
@@ -173,7 +199,7 @@ public class ReaderController {
         return "reader/take";
     }
 
-    @PostMapping("/take/{id}/{readerId}")
+    @PutMapping("/take/{id}/{readerId}")
     public String postTake(
             @ModelAttribute("id") @PathVariable("id") Long id,
             @PathVariable("readerId") Long readerId,
@@ -186,13 +212,14 @@ public class ReaderController {
 
         SpecificBook specificBookFromDB = specificBookRepository.findById(id).get();
         Reader reader = readerRepository.findById(readerId).get();
-        specificBookFromDB.getSpecificBookReaders().add(specificBookReader);
         specificBookFromDB.setInPlace(false);
         specificBookReader.setReturn(false);
         specificBookReader.setReader(reader);
         specificBookReader.setSpecificBook(specificBookFromDB);
+        specificBookReader.setReader(reader);
         reader.getSpecificBooksReader().add(specificBookReader);
         readerRepository.save(reader);
+
 
         return "redirect:/book/table/";
     }

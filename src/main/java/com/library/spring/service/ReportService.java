@@ -122,7 +122,7 @@ public class ReportService {
                     row.createCell(7).setCellValue(bl.getSpecificBook().getBook().getAuthor().getAuthorName());
                     row.createCell(8).setCellValue(bl.getSpecificBook().getBook().getGenre().getGenreName());
                     row.createCell(9).setCellValue(bl.getSpecificBook().getBook().getPublisher().getPublisherName());
-                    row.createCell(10).setCellValue(bl.getSpecificBook().getBook().getPrice());
+                    row.createCell(10).setCellValue(bl.getSpecificBook().getBook().getPrice().doubleValue());
                     row.createCell(11).setCellValue(bl.getSpecificBook().getUniqueCode());
                     row.createCell(12).setCellValue(bl.getPrice());
                     row.createCell(13).setCellValue(bl.getSpecificBook().getSpecificBookReaders().stream().sorted()

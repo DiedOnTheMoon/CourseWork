@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -19,14 +20,17 @@ public class SpecificBook {
     @Column(name = "IN_PLACE")
     private Boolean inPlace;
     @Column(name = "SHELF")
+    @NotNull(message = "shelf should not be null")
     @NotBlank(message = "shelf can't be blank")
     @Length(min=3, max=255, message = "shelf length should be >=3 and <= 255")
     private String shelf;
     @Column(name = "RANK")
+    @NotNull(message = "rank should not be null")
     @NotBlank(message = "rank can't be blank")
     @Length(min=3, max=255, message = "rank length should be >=3 and <= 255")
     private String rank;
     @Column(name = "ROOM")
+    @NotNull(message = "room should not be null")
     @NotBlank(message = "room can't be blank")
     @Length(min=3, max=255, message = "room length should be >= 3 and <= 255 ")
     private String room;

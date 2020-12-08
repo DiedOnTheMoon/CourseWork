@@ -19,71 +19,50 @@
                 <input type="text" readonly name="lastName" th:field="${reader.lastName}">
             </label>
         </div>
-        <p></p>
-        <div class="form-group col-md-1">
-            <label> Date of birth:<p></p>
-                <input type="date" readonly name="dateOfBirth" th:field="${reader.dateOfBirth}">
-            </label>
-        </div>
-        <p></p>
-        <div class="form-group col-md-1">
-            <label> Address:<p></p>
-                <input type="text" readonly name="address" th:field="${reader.address}">
-            </label>
-        </div>
-        <p></p>
-        <div class="form-group col-md-1">
-            <label> Phone:<p></p>
-                <input type="text" readonly name="phone" th:field="${reader.phone}">
-            </label>
-        </div>
-        <p></p>
-        <div class="form-group col-md-1">
-            <label> Behavior rank:<p></p>
-                <input type="text" readonly name="behaviorRank" th:field="${reader.behaviorRank}">
-            </label>
-        </div>
-        <p></p>
-        <div class="form-group col-md-1">
-            <label>Number of books owed:<p></p>
-                <input type="text" name="blacklists" readonly th:text="${reader.blacklists?.size()}">
-            </label>
-        </div>
-        <p></p>
     </div>
-    <label> Taken books without Indebtedness</label>
-    <p></p>
-    <form th:method="POST" th:action="@{/reader/filter/book}">
-        <div class="form-group col-md-1 pt-3">
-            <label>Search
-                <input type="text" name="bookFilter">
-            </label>
-        </div>
-        <div class="form-group col-md-1">
-            <input type="submit" value="Search" >
-        </div>
-    </form>
-    <table class="table table-striped table-bordered">
-        <thead class="table-dark">
-        <tr>
-            <th scope="col"> Title</th>
-            <th scope="col"> Return Book</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="book : ${books}">
-            <td th:text="${book.book.bookName}"></td>
-            <td>
-                <form th:method="POST" th:action="@{/book/return/{id}/{readerId}(readerId=${reader.id}, id=${book.id})}">
-                    <input type="submit" value="return">
-                </form>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-    <div th:if="${reader.getSizeBlacklist() == 0}">
+    <div th:if="${reader.getSizeBooks() != 0}">
+        <label> Taken books without Indebtedness</label>
+        <p></p>
+        <form th:method="POST" th:action="@{/reader/filter/book/}">
+            <div class="form-group col-md-1 pt-3">
+                <label>Search
+                    <input type="text" name="bookFilter">
+                </label>
+            </div>
+            <div class="form-group col-md-1">
+                <input type="submit" value="Search" >
+            </div>
+        </form>
+        <table class="table table-striped table-bordered w-50 pl-3">
+            <thead class="table-dark">
+            <tr>
+                <th scope="col"> Title</th>
+                <th scope="col"> Unique code</th>
+                <th scope="col"> Lost Price</th>
+                <th scope="col"> Return Book</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="book : ${books}">
+                <td th:text="${book.book.bookName}"></td>
+                <td th:text="${book.uniqueCode}"></td>
+                <td>
+                    <form th:method="DELETE" th:action="@{/book/delete/{id}/{readerId}(readerId=${reader.id}, id=${book.id})}">
+                        <input type="submit" th:value="${book.book.price}">
+                    </form>
+                </td>
+                <td>
+                    <form th:method="POST" th:action="@{/book/return/{id}/{readerId}(readerId=${reader.id}, id=${book.id})}">
+                        <input type="submit" value="return">
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:if="${reader.getSizeBlacklist() != 0}">
         <label> Indebtedness </label>
-        <form method="POST" th:action="@{/reader/filter/blacklistFilter}">
+        <form method="POST" th:action="@{/reader/filter/blacklistFilter/}">
             <div class="form-group col-md-1 pt-3">
                 <label>Search
                     <input type="text" name="blacklistFilter">
@@ -97,14 +76,22 @@
             <thead class="table-dark">
             <tr>
                 <th scope="col"> Title</th>
+                <th scope="col"> Unique code</th>
+                <th scope="col"> Lost Price</th>
                 <th scope="col"> Return Date</th>
                 <th scope="col"> Price</th>
                 <th scope="col"> Return Book</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="book : ${owed}">
+            <tr th:each="book : ${owed}" th:if="${book.paid == false}">
                 <td th:text="${book.specificBook.book.bookName}"></td>
+                <td th:text="${book.specificBook.uniqueCode}"></td>
+                <td>
+                    <form th:method="DELETE" th:action="@{/book/delete/{id}/{readerId}(readerId=${reader.id}, id=${book.id})}">
+                        <input type="submit" th:value="${book.price}">
+                    </form>
+                </td>
                 <td th:text="${book.specificBook.getReturnDate()}"></td>
                 <td th:text="${book.normalRepresentation()}"></td>
                 <td>
