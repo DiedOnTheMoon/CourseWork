@@ -1,6 +1,5 @@
 package com.library.spring.service;
 
-import com.library.spring.models.Librarian;
 import com.library.spring.repository.LibrarianRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

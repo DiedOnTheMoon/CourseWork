@@ -39,7 +39,7 @@
                 <td th:text="${book.year}"></td>
                 <td th:text="${book.price}"></td>
                 <td><a th:href="@{/book/edit/{id}(id=${book.id})}">Edit</a></td>
-                <td><a th:href="@{/specificbook/{id}/add (id=${book.id})}"></a></td>
+                <td><a th:href="@{/specificBook/{id}/add (id=${book.id})}">Add</a></td>
                 <td>
                     <form th:method="DELETE" th:action="@{/book/delete/{id}(id=${book.id})}">
                         <input type="submit" value="DELETE">

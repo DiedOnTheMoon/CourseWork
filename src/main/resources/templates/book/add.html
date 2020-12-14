@@ -6,9 +6,6 @@
 </head>
 <body>
     <div th:include="parts/common.html :: navigation"> </div>
-    <div th:if="${param.error}">
-        Invalid input data.
-    </div>
     <form th:action="@{/book/add}" method="post">
         <div class="form-group col-md-6">
             <label>Book Name: </label>

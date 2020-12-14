@@ -8,7 +8,6 @@ import com.library.spring.repository.ReaderRepository;
 import com.library.spring.repository.SpecificBookReaderRepository;
 import com.library.spring.repository.SpecificBookRepository;
 import com.library.spring.service.BlacklistService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;

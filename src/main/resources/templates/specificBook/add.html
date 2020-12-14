@@ -7,7 +7,7 @@
 </head>
 <body>
     <div th:include="parts/common.html :: navigation"></div>
-    <form method="post" th:action="@{/specificBook/{id}(id=${id})/add}" th:object="${specificBook}">
+    <form method="post" th:action="@{/specificBook/{id}/add (id=${id})}" th:object="${specificBook}">
         <div class="form-group col-md-1 pt-5">
             <label>
                 Shelf:

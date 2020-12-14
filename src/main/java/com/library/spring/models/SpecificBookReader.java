@@ -6,7 +6,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Future;
-import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDate;
@@ -21,6 +20,7 @@ public class SpecificBookReader {
     private Long id;
 
     @Column(name="IS_RETURN")
+    @NotNull
     private Boolean isReturn;
 
     @Column(name = "DATE_OF_ISSUE")

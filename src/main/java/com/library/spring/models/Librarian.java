@@ -4,6 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
 
 @Entity
@@ -13,8 +14,10 @@ public class Librarian implements UserDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private Long id;
+    @NotNull
     @Column(name = "USERNAME")
     private String username;
+    @NotNull
     @Column(name = "PASSWORD")
     private String password;
 

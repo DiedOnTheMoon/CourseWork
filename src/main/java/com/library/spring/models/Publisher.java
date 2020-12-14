@@ -22,7 +22,7 @@ public class Publisher {
     @Length(min=3, max=255, message = "publisher length isn't correct (min=3, max=255)")
     private String publisherName;
     @ManyToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "CITY_ID")
+    @JoinColumn(name = "CITY_ID", nullable = false)
     private City city;
     @OneToMany(mappedBy = "publisher", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Book> books;

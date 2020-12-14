@@ -7,8 +7,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -30,18 +30,23 @@ public class Reader {
     @Length(min=3, max=255, message = "Last name length isn't correct (min=3, max=255)")
     private String lastName;
     @Column(name = "DATE_OF_BIRTH")
+    @NotNull(message = "date of birth should not be null")
     @Past(message = "date of Birth should be in past")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;
     @Column(name = "ADDRESS")
+    @NotNull(message = "address should not be null")
     @NotBlank(message = "address cannot be blank")
     @Length(min=3, max=255, message = "address length isn't correct (min=3, max=255)")
     private String address;
     @Column(name = "PHONE")
+    @NotNull(message = "phone should not be null")
+    @Pattern(regexp = "^(\\s*)?(\\+)?([- _():=+]?\\d[- _():=+]?){10,14}(\\s*)?$")
     @NotBlank(message = "phone cannot be blank")
     @Length(min=3, max=255, message = "phone length isn't correct (min=3, max=255)")
     private String phone;
     @Column(name = "BEHAVIOR_RANK")
+    @NotNull
     private int behaviorRank;
     @OneToMany(mappedBy = "reader", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Blacklist> blacklists;

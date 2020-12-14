@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Controller
@@ -68,7 +69,11 @@ public class SpecificBookController {
         }
         Book book = bookRepository.findById(id).get();
         Set<SpecificBook> books = book.getSpecificBooks();
-
+        specificBook.setBook(book);
+        specificBook.setInPlace(true);
+        specificBook.setUniqueCode(UUID.randomUUID().toString() + "/" + book.getBookName() +
+                "/" + book.getLanguage().getLanguageName() + "/" + book.getPublisher().getPublisherName() +
+                "/" + book.getYear() + "/" + book.getPrice());
         books.add(specificBook);
         book.setSpecificBooks(books);
 

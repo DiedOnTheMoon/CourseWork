@@ -16,8 +16,10 @@ public class SpecificBook {
     @Column(name = "ID")
     private Long id;
     @Column(name = "UNIQUE_CODE")
+    @NotNull
     private String uniqueCode;
     @Column(name = "IN_PLACE")
+    @NotNull
     private Boolean inPlace;
     @Column(name = "SHELF")
     @NotNull(message = "shelf should not be null")

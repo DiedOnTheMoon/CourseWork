@@ -1,6 +1,7 @@
 package com.library.spring.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "BLACKLIST")
@@ -9,16 +10,17 @@ public class Blacklist {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private Long id;
+    @NotNull
     @Column(name = "PRICE")
     private Long price;
+    @NotNull
     @Column(name = "ISPAID")
     private Boolean isPaid;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "READER_ID")
+    @JoinColumn(name = "READER_ID", nullable = false)
     private Reader reader;
-
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "SPECIFIC_BOOK_ID", referencedColumnName = "ID")
+    @JoinColumn(name = "SPECIFIC_BOOK_ID", referencedColumnName = "ID", nullable = false)
     private SpecificBook specificBook;
 
     public Blacklist() {
